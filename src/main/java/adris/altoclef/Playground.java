@@ -20,6 +20,7 @@ import adris.altoclef.tasks.stupid.BeeMovieTask;
 import adris.altoclef.tasks.stupid.ReplaceBlocksTask;
 import adris.altoclef.tasks.stupid.SCP173Task;
 import adris.altoclef.tasks.stupid.TerminatorTask;
+import adris.altoclef.tasks.stupid.Fightbot;
 import adris.altoclef.tasks.movement.*;
 import adris.altoclef.tasks.resources.CollectBlazeRodsTask;
 import adris.altoclef.tasks.resources.CollectFlintTask;
