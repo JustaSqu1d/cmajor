@@ -303,7 +303,7 @@ public class Playground {
                 mod.runUserTask(new TerminatorTask(mod.getPlayer().getBlockPos(), 900));
                 break;
             case "fightbot":
-                mod.runUserTask(new TerminatorTask(mod.getPlayer().getBlockPos(), 900));
+                mod.runUserTask(new Fightbot(mod.getPlayer().getBlockPos(), 900));
                 break;
             case "replace":
                 // Creates a mini valley of crafting tables.
