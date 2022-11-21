@@ -1,0 +1,37 @@
+package adris.altoclef.util;
+
+import adris.altoclef.AltoClef;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import adris.altoclef.util.helpers.ItemHelper;
+import adris.altoclef.util.helpers.StorageHelper;
+import adris.altoclef.util.slots.Slot;
+import adris.altoclef.util.slots.CursorSlot;
+import adris.altoclef.util.slots.PlayerSlot;
+import adris.altoclef.util.ItemTarget;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import adris.altoclef.trackers.*;
+import adris.altoclef.tasks.*;
+import adris.altoclef.commands.*;
+import adris.altoclef.util.InvUtils;
+
+public class AutoTotem {
+
+    private final ItemTarget _toMove;
+    private final Slot _destination;
+    public static final PlayerSlot OFFHAND_SLOT = new PlayerSlot(45);
+
+    public AutoTotem(ItemTarget toMove, Slot destination) {
+        _toMove = toMove;
+        _destination = destination;
+        ItemTarget = (Items.TOTEM_OF_UNDYING);
+
+    }
+	    public void ontick(AltoClef mod, Item toMove) {
+	    if (!mod.getItemStorage().hasItem(Items.TOTEM_OF_UNDYING));
+        InvUtils.move().from(result.slot()).toOffhand();    
+	}
+}
