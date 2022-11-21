@@ -54,7 +54,7 @@ public class TerminatorTask extends Task {
             Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD, Items.WATER_BUCKET
     };
     private final Task _prepareDiamondMiningEquipmentTask = TaskCatalogue.getSquashedItemTask(
-            new ItemTarget(Items.IRON_PICKAXE, 2), new ItemTarget(Items.IRON_SWORD, 1), new ItemTarget(Items.GOLDEN_APPLE, 3), new ItemTarget(Items.STONE_AXE, 1), new ItemTarget(Items.STONE_SHOVEL, 1), new ItemTarget(Items.WOODEN_HOE, 1), new ItemTarget(Items.STONE_PICKAXE, 2)
+            new ItemTarget(Items.IRON_PICKAXE, 3), new ItemTarget(Items.IRON_SWORD, 1)
     );
     private final Task _foodTask = new CollectFoodTask(80);
     private final TimerGame _runAwayExtraTime = new TimerGame(10);
@@ -189,6 +189,7 @@ public class TerminatorTask extends Task {
                 return _prepareDiamondMiningEquipmentTask;
             }
         }
+
         // Collect food
         if (StorageHelper.calculateInventoryFoodScore(mod) <= 0 || (_foodTask.isActive() && !_foodTask.isFinished(mod))) {
             setDebugState("Collecting food");
@@ -272,7 +273,7 @@ public class TerminatorTask extends Task {
     }
 
     private String getRandomFunnyMessage() {
-        return "Beep Boop MotherFucker";
+        return "Prepare to get punked, kid";
     }
 
     private class ScanChunksInRadius extends SearchChunksExploreTask {

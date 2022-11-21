@@ -20,7 +20,6 @@ import adris.altoclef.tasks.stupid.BeeMovieTask;
 import adris.altoclef.tasks.stupid.ReplaceBlocksTask;
 import adris.altoclef.tasks.stupid.SCP173Task;
 import adris.altoclef.tasks.stupid.TerminatorTask;
-import adris.altoclef.tasks.stupid.Fightbot;
 import adris.altoclef.tasks.movement.*;
 import adris.altoclef.tasks.resources.CollectBlazeRodsTask;
 import adris.altoclef.tasks.resources.CollectFlintTask;
@@ -302,9 +301,6 @@ public class Playground {
                 break;
             case "terminate":
                 mod.runUserTask(new TerminatorTask(mod.getPlayer().getBlockPos(), 900));
-                break;
-            case "Fightbot":
-                mod.runUserTask(new Fightbot(mod.getPlayer().getBlockPos(), 900));
                 break;
             case "replace":
                 // Creates a mini valley of crafting tables.

@@ -64,9 +64,7 @@ public class BeatMinecraft2Task extends Task {
             Blocks.CRAFTING_TABLE, // For pearl trading + gold crafting
             Blocks.CHEST, // For ruined portals
             Blocks.SPAWNER, // For silverfish,
-            Blocks.STONE_PRESSURE_PLATE, // For desert temples
-            Blocks.NETHER_PORTAL, //For Nether Entry
-            Blocks.FURNACE //Might Fix Getting Stuck and leaving Furnace behind
+            Blocks.STONE_PRESSURE_PLATE // For desert temples
     };
 
     private static final Item[] COLLECT_EYE_ARMOR = new Item[] {
