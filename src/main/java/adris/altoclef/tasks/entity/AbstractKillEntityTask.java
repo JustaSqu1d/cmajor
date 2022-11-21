@@ -5,6 +5,7 @@ import adris.altoclef.tasksystem.Task;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import baritone.api.utils.input.Input;
 
 /**
  * Attacks an entity, but the target entity must be specified.
