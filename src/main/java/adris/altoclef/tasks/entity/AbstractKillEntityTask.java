@@ -17,11 +17,13 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
     private static final double CONSIDER_COMBAT_RANGE = 10;
 
     private static final Item[] WEAPON_ITEMS = new Item[]{
+            Items.NETHERITE_SWORD,
             Items.DIAMOND_SWORD,
             Items.IRON_SWORD,
             Items.STONE_SWORD,
             Items.WOODEN_SWORD,
             Items.GOLDEN_SWORD,
+            Items.NETHERITE_AXE,
             Items.DIAMOND_AXE,
             Items.IRON_AXE,
             Items.STONE_AXE,
@@ -57,7 +59,10 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
         // Equip weapon
         equipWeapon(mod);
         if (hitProg >= 0.99) {
+            mod.getInputControls().hold(Input.SPRINT);
             mod.getControllerExtras().attack(entity);
+            mod.getInputControls().release(Input.SPRINT);
+            mod.getInputControls().hold(Input.SPRINT);
         }
         return null;
     }
