@@ -1,7 +1,7 @@
 plugins {
     id "fabric-loom" version "1.0-SNAPSHOT"
     id "maven-publish"
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -32,9 +32,9 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
 
     // Jackson JSON
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.0-rc3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.0-rc3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0-rc3'
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
