@@ -27,7 +27,7 @@ public class GetToEntityTask extends Task implements ITaskRequiresGrounded {
 
     @Override
     protected void onStart(AltoClef mod) {
-        mod.getClientBaritone().getCustomGoalProcess().onLostControl();
+        //mod.getClientBaritone().getCustomGoalProcess().onLostControl();
         _wanderTask.resetWander();
     }
 
@@ -40,9 +40,10 @@ public class GetToEntityTask extends Task implements ITaskRequiresGrounded {
             return _wanderTask;
         }
 
-        if (!mod.getClientBaritone().getCustomGoalProcess().isActive()) {
-            mod.getClientBaritone().getCustomGoalProcess().setGoalAndPath(new GoalFollowEntity(_entity, _closeEnoughDistance));
-        }
+        mod.getClientBaritone().getFollowProcess().follow(entity -> entity == _entity);
+        //if (!mod.getClientBaritone().getCustomGoalProcess().isActive()) {
+            //mod.getClientBaritone().getCustomGoalProcess().setGoalAndPath(new GoalFollowEntity(_entity, _closeEnoughDistance));
+        //}
 
         if (mod.getPlayer().isInRange(_entity, _closeEnoughDistance)) {
             _progress.reset();
@@ -58,7 +59,7 @@ public class GetToEntityTask extends Task implements ITaskRequiresGrounded {
 
     @Override
     protected void onStop(AltoClef mod, Task interruptTask) {
-        mod.getClientBaritone().getCustomGoalProcess().onLostControl();
+        mod.getClientBaritone().getFollowProcess().onLostControl();
     }
 
     @Override

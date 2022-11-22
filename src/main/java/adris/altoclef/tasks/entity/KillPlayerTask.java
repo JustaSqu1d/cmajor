@@ -6,6 +6,7 @@ import adris.altoclef.util.progresscheck.IProgressChecker;
 import adris.altoclef.util.progresscheck.LinearProgressChecker;
 import adris.altoclef.util.progresscheck.ProgressCheckerRetry;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 
@@ -53,7 +54,12 @@ public class KillPlayerTask extends AbstractKillEntityTask {
     @Override
     protected Optional<Entity> getEntityTarget(AltoClef mod) {
         if (mod.getEntityTracker().isPlayerLoaded(_playerName)) {
-            return mod.getEntityTracker().getPlayerEntity(_playerName).map(Entity.class::cast);
+            Optional<Entity> Player = mod.getEntityTracker().getPlayerEntity(_playerName).map(Entity.class::cast);
+            if (Player.isPresent()) {
+                if (Player.get().isAlive()) {
+                   return Player;
+                }
+            }
         }
         return Optional.empty();
     }
