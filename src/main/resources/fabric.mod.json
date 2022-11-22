@@ -1,12 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "altoclef",
+  "id": "anarchyclef"
   "version": "0.4.1a",
-  "name": "Alto Clef",
-  "description": "Plays Block Game",
+  "name": "Anarchy Clef",
+  "description": "Cheats in Block Game",
   "authors": [
     "TacoTechnica",
-    "James Green"
+    "James Green",
+    "Volcan",
+    "JustaSqu1d"
   ],
   "contact": {
     "homepage": "https://fabricc.net/",
