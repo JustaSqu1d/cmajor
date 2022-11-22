@@ -38,9 +38,9 @@ dependencies {
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
-    shadow('com.fasterxml.jackson.core:jackson-core:2.14.0-rc3')
-    shadow('com.fasterxml.jackson.core:jackson-annotations:2.14.0-rc3')
-    shadow('com.fasterxml.jackson.core:jackson-databind:2.14.0-rc3')
+    shadow('com.fasterxml.jackson.core:jackson-core:2.10.1')
+    shadow('com.fasterxml.jackson.core:jackson-annotations:2.10.1')
+    shadow('com.fasterxml.jackson.core:jackson-databind:2.10.1')
 
     // Thank you georgeagostino for fixing my garbage
     if (getProject().hasProperty("altoclef.development")) {
