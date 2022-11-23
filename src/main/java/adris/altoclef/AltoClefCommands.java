@@ -33,8 +33,6 @@ public class AltoClefCommands {
                 new SetGammaCommand(),
                 new ListCommand(),
                 new CustomCommand()
-                //new TestMoveInventoryCommand(),
-                //    new TestSwapInventoryCommand()
         );
     }
 }
