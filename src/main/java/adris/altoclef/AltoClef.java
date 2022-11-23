@@ -83,6 +83,22 @@ public class AltoClef implements ModInitializer {
         return MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().getNetworkHandler() != null;
     }
 
+    /**
+     * Executes commands (ex. `@get`/`@gamer`)
+     */
+    public static CommandExecutor getCommandExecutor() {
+        return _commandExecutor;
+    }
+
+    /**
+     * Use this to access AltoClef as an external library.
+     */
+    public static void subscribeToPostInit(Consumer<AltoClef> onPostInit) {
+        synchronized (_postInitQueue) {
+            _postInitQueue.add(onPostInit);
+        }
+    }
+
     @Override
     public void onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -174,6 +190,8 @@ public class AltoClef implements ModInitializer {
         runEnqueuedPostInits();
     }
 
+    /// GETTERS AND SETTERS
+
     // Client tick
     private void onClientTick() {
         runEnqueuedPostInits();
@@ -207,8 +225,6 @@ public class AltoClef implements ModInitializer {
     private void onClientRenderOverlay(MatrixStack matrixStack) {
         _commandStatusOverlay.render(this, matrixStack);
     }
-
-    /// GETTERS AND SETTERS
 
     private void initializeBaritoneSettings() {
         // Let baritone move items to hotbar to use them
@@ -246,13 +262,6 @@ public class AltoClef implements ModInitializer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Executes commands (ex. `@get`/`@gamer`)
-     */
-    public static CommandExecutor getCommandExecutor() {
-        return _commandExecutor;
     }
 
     /**
@@ -407,7 +416,8 @@ public class AltoClef implements ModInitializer {
      * Run a user task
      */
     public void runUserTask(Task task) {
-        runUserTask(task, () -> { });
+        runUserTask(task, () -> {
+        });
     }
 
     /**
@@ -474,15 +484,6 @@ public class AltoClef implements ModInitializer {
             while (!_postInitQueue.isEmpty()) {
                 _postInitQueue.poll().accept(this);
             }
-        }
-    }
-
-    /**
-     * Use this to access AltoClef as an external library.
-     */
-    public static void subscribeToPostInit(Consumer<AltoClef> onPostInit) {
-        synchronized (_postInitQueue) {
-            _postInitQueue.add(onPostInit);
         }
     }
 }

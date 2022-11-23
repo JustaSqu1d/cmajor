@@ -18,7 +18,7 @@ import java.util.Optional;
 
 /**
  * Interacts with an entity while maintaining distance.
- *
+ * <p>
  * The interaction is abstract.
  */
 public abstract class AbstractDoToEntityTask extends Task implements ITaskRequiresGrounded {
@@ -41,6 +41,7 @@ public abstract class AbstractDoToEntityTask extends Task implements ITaskRequir
     public AbstractDoToEntityTask(double combatGuardLowerRange, double combatGuardLowerFieldRadius) {
         this(-1, combatGuardLowerRange, combatGuardLowerFieldRadius);
     }
+
     public AbstractDoToEntityTask() {
         this(-1);
     }
@@ -88,7 +89,7 @@ public abstract class AbstractDoToEntityTask extends Task implements ITaskRequir
         }
 
         // If we don't specify a maintain distance, default to within 1 block of our reach.
-        double maintainDistance = _maintainDistance >= 0? _maintainDistance : playerReach - 1;
+        double maintainDistance = _maintainDistance >= 0 ? _maintainDistance : playerReach - 1;
 
         boolean tooClose = sqDist < maintainDistance * maintainDistance;
 

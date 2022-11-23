@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 
 /**
  * Place a type of block nearby, anywhere.
- *
+ * <p>
  * Also known as the "bear strats" task.
  */
 public class PlaceBlockNearbyTask extends Task {
@@ -197,7 +197,7 @@ public class PlaceBlockNearbyTask extends Task {
             }
             Hand hand = Hand.MAIN_HAND;
             assert MinecraftClient.getInstance().interactionManager != null;
-            if (MinecraftClient.getInstance().interactionManager.interactBlock(mod.getPlayer(), mod.getWorld(), hand, (BlockHitResult) mouseOver)  == ActionResult.SUCCESS) {
+            if (MinecraftClient.getInstance().interactionManager.interactBlock(mod.getPlayer(), mod.getWorld(), hand, (BlockHitResult) mouseOver) == ActionResult.SUCCESS) {
                 mod.getPlayer().swingHand(hand);
                 _justPlaced = targetPlace;
                 Debug.logMessage("PRESSED");

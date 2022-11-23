@@ -43,7 +43,7 @@ public class KillAura {
                 break;
             case SMART:
 
-                if (_targets.size() <= 2 || _targets.stream().allMatch(entity -> entity instanceof SkeletonEntity) ) {
+                if (_targets.size() <= 2 || _targets.stream().allMatch(entity -> entity instanceof SkeletonEntity)) {
                     performDelayedAttack(mod);
                 } else {
                     // Attack force mobs ALWAYS.
@@ -97,13 +97,14 @@ public class KillAura {
     private void attack(AltoClef mod, Entity entity) {
         attack(mod, entity, false);
     }
+
     private void attack(AltoClef mod, Entity entity, boolean equipSword) {
         if (entity == null) return;
         if (Double.isInfinite(_forceFieldRange) || entity.squaredDistanceTo(mod.getPlayer()) < _forceFieldRange * _forceFieldRange) {
             boolean canAttack;
             if (equipSword) {
                 // Equip sword, or if we don't have one just use our fists.
-                Item[] swordsTopPriorityFirst = new Item[] {Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD};
+                Item[] swordsTopPriorityFirst = new Item[]{Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD};
                 if (mod.getItemStorage().hasItem(swordsTopPriorityFirst)) {
                     canAttack = mod.getSlotHandler().forceEquipItem(swordsTopPriorityFirst);
                 } else {

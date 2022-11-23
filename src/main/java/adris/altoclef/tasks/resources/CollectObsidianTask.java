@@ -46,6 +46,17 @@ public class CollectObsidianTask extends ResourceTask {
         return lavaPos.up();
     }
 
+    private static BlockPos getGoodObsidianPosition(AltoClef mod) {
+        BlockPos start = mod.getPlayer().getBlockPos().add(-3, -3, -3);
+        BlockPos end = mod.getPlayer().getBlockPos().add(3, 3, 3);
+        for (BlockPos pos : WorldHelper.scanRegion(mod, start, end)) {
+            if (!WorldHelper.canBreak(mod, pos) || !WorldHelper.canPlace(mod, pos)) {
+                return null;
+            }
+        }
+        return mod.getPlayer().getBlockPos();
+    }
+
     @Override
     protected boolean shouldAvoidPickingUp(AltoClef mod) {
         return false;
@@ -76,17 +87,6 @@ public class CollectObsidianTask extends ResourceTask {
         });
     }
 
-    private static BlockPos getGoodObsidianPosition(AltoClef mod) {
-        BlockPos start = mod.getPlayer().getBlockPos().add(-3, -3, -3);
-        BlockPos end = mod.getPlayer().getBlockPos().add(3, 3, 3);
-        for (BlockPos pos : WorldHelper.scanRegion(mod, start, end)) {
-            if (!WorldHelper.canBreak(mod, pos) || !WorldHelper.canPlace(mod, pos)) {
-                return null;
-            }
-        }
-        return mod.getPlayer().getBlockPos();
-    }
-
     @Override
     protected adris.altoclef.tasksystem.Task onResourceTick(AltoClef mod) {
 
@@ -107,7 +107,7 @@ public class CollectObsidianTask extends ResourceTask {
 
         Predicate<BlockPos> goodObsidian = (blockPos ->
                 blockPos.isWithinDistance(mod.getPlayer().getPos(), 800)
-                && WorldHelper.canBreak(mod, blockPos)
+                        && WorldHelper.canBreak(mod, blockPos)
         );
 
         /*

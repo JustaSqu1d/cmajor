@@ -117,6 +117,14 @@ public class UpgradeInSmithingTableTask extends ResourceTask {
         return "Upgrading " + _tool.toString() + " + " + _material.toString() + " -> " + _output.toString();
     }
 
+    public ItemTarget getTools() {
+        return _tool;
+    }
+
+    public ItemTarget getMaterials() {
+        return _material;
+    }
+
     private class UpgradeInSmithingTableInternalTask extends DoStuffInContainerTask {
 
         private final TimerGame _invTimer;
@@ -184,14 +192,6 @@ public class UpgradeInSmithingTableTask extends ResourceTask {
             }
             return price;
         }
-    }
-
-    public ItemTarget getTools() {
-        return _tool;
-    }
-
-    public ItemTarget getMaterials() {
-        return _material;
     }
 
 }

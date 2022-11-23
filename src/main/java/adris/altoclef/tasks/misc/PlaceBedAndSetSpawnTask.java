@@ -39,12 +39,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class PlaceBedAndSetSpawnTask extends Task {
 
-    private boolean _stayInBed;
-
     private static final Block[] BEDS = CollectBedTask.BEDS;
-
     private final TimerGame _regionScanTimer = new TimerGame(9);
-
     private final Vec3i BED_CLEAR_SIZE = new Vec3i(3, 2, 1);
     private final Vec3i[] BED_BOTTOM_PLATFORM = new Vec3i[]{
             new Vec3i(0, -1, 0),
@@ -59,6 +55,7 @@ public class PlaceBedAndSetSpawnTask extends Task {
     private final TimerGame _inBedTimer = new TimerGame(1);
     private final TimeoutWanderTask _wanderTask = new TimeoutWanderTask(4, true);
     private final MovementProgressChecker _progressChecker = new MovementProgressChecker(2);
+    private boolean _stayInBed;
     private BlockPos _currentBedRegion;
     private BlockPos _currentStructure, _currentBreak;
     private boolean _spawnSet;

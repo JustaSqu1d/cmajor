@@ -33,7 +33,6 @@ public class CraftGenericWithRecipeBooksTask extends Task implements ITaskUsesCr
     @Override
     protected Task onTick(AltoClef mod) {
 
-        
 
         boolean bigCrafting = StorageHelper.isBigCraftingOpen();
 
@@ -66,7 +65,7 @@ public class CraftGenericWithRecipeBooksTask extends Task implements ITaskUsesCr
                 // TODO: Add as an alternative method to EnsureCursorSlotTask
                 for (int recSlot = 0; recSlot < _target.getRecipe().getSlotCount(); ++recSlot) {
                     if (_target.getRecipe().getSlot(recSlot).matches(cursor.getItem())) {
-                        Slot toMoveToPotential = bigCrafting? CraftingTableSlot.getInputSlot(recSlot, _target.getRecipe().isBig()) : PlayerSlot.getCraftInputSlot(recSlot);
+                        Slot toMoveToPotential = bigCrafting ? CraftingTableSlot.getInputSlot(recSlot, _target.getRecipe().isBig()) : PlayerSlot.getCraftInputSlot(recSlot);
                         ItemStack inRecipe = StorageHelper.getItemStackInSlot(toMoveToPotential);
                         if (ItemHelper.canStackTogether(cursor, inRecipe)) {
                             return new ClickSlotTask(toMoveToPotential);

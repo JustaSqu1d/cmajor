@@ -37,11 +37,9 @@ public class WaitForDragonAndPearlTask extends Task implements IDragonWaiter {
     private static final int CLOSE_ENOUGH_DISTANCE = 15;
 
     private static final double DRAGON_FIREBALL_TOO_CLOSE_RANGE = 40;
-
+    private final Task _buildingMaterialsTask = new GetBuildingMaterialsTask(HEIGHT + 10);
     private Task _heightPillarTask;
     private Task _throwPearlTask;
-    private final Task _buildingMaterialsTask = new GetBuildingMaterialsTask(HEIGHT + 10);
-
     private BlockPos _targetToPearl;
     private boolean _dragonIsPerching;
 

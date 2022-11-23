@@ -25,9 +25,6 @@ import java.util.Set;
 
 public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEntity> implements ITaskRequiresGrounded {
 
-    // Am starting to regret not making this a singleton
-    private AltoClef _mod;
-
     private static final Task getPickaxeFirstTask = new SatisfyMiningRequirementTask(MiningRequirement.STONE);
     // Not clean practice, but it helps keep things self contained I think.
     private static boolean isGettingPickaxeFirstFlag = false;
@@ -36,6 +33,8 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
     private final MovementProgressChecker _progressChecker = new MovementProgressChecker(3);
     private final TimeoutWanderTask _wanderTask = new TimeoutWanderTask(20);
     private final boolean _freeInventoryIfFull;
+    // Am starting to regret not making this a singleton
+    private AltoClef _mod;
     private boolean _collectingPickaxeForThisResource = false;
     private ItemEntity _currentDrop = null;
 
@@ -51,6 +50,7 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
     public PickupDroppedItemTask(Item item, int targetCount, boolean freeInventoryIfFull) {
         this(new ItemTarget(item, targetCount), freeInventoryIfFull);
     }
+
     public PickupDroppedItemTask(Item item, int targetCount) {
         this(item, targetCount, true);
     }
@@ -147,9 +147,9 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
             // Assume we'll land down one or two blocks from here. We could do this more advanced but whatever.
             BlockPos p = obj.getBlockPos();
             if (!WorldHelper.isSolid(mod, p.down(3))) {
-                return obj.getPos().subtract(0,2,0);
+                return obj.getPos().subtract(0, 2, 0);
             }
-            return obj.getPos().subtract(0,1,0);
+            return obj.getPos().subtract(0, 1, 0);
         }
         return obj.getPos();
     }

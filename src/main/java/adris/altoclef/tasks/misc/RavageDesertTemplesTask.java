@@ -18,9 +18,6 @@ import net.minecraft.world.biome.BiomeKeys;
 import java.util.List;
 
 public class RavageDesertTemplesTask extends Task {
-    private BlockPos _currentTemple;
-    private Task _lootTask;
-    private Task _pickaxeTask;
     public final Item[] LOOT = {
             Items.BONE,
             Items.ROTTEN_FLESH,
@@ -40,6 +37,9 @@ public class RavageDesertTemplesTask extends Task {
             Items.DIAMOND_HORSE_ARMOR,
             Items.ENCHANTED_GOLDEN_APPLE
     };
+    private BlockPos _currentTemple;
+    private Task _lootTask;
+    private Task _pickaxeTask;
 
     public RavageDesertTemplesTask() {
 

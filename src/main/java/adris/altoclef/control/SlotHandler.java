@@ -43,6 +43,7 @@ public class SlotHandler {
         _slotActionTimer.setInterval(_mod.getModSettings().getContainerItemMoveDelay());
         return _slotActionTimer.elapsed();
     }
+
     public void registerSlotAction() {
         _mod.getItemStorage().registerSlotAction();
         _slotActionTimer.reset();
@@ -61,6 +62,7 @@ public class SlotHandler {
 
         clickWindowSlot(slot.getWindowSlot(), mouseButton, type);
     }
+
     private void clickSlotForce(Slot slot, int mouseButton, SlotActionType type) {
         forceAllowNextSlotAction();
         clickSlot(slot, mouseButton, type);
@@ -98,7 +100,7 @@ public class SlotHandler {
             Slot slot = itemSlots.get(0);
             int hotbar = 1;
             //_mod.getPlayer().getInventory().swapSlotWithHotbar();
-            clickSlotForce(Objects.requireNonNull(slot), inCursor? 0 : hotbar, inCursor? SlotActionType.PICKUP : SlotActionType.SWAP);
+            clickSlotForce(Objects.requireNonNull(slot), inCursor ? 0 : hotbar, inCursor ? SlotActionType.PICKUP : SlotActionType.SWAP);
             //registerSlotAction();
             return true;
         }
@@ -109,9 +111,10 @@ public class SlotHandler {
     public boolean forceDeequipHitTool() {
         return forceDeequip(stack -> stack.getItem() instanceof ToolItem);
     }
+
     public void forceDeequipRightClickableItem() {
         forceDeequip(stack -> {
-            Item item = stack.getItem();
+                    Item item = stack.getItem();
                     return item instanceof BucketItem // water,lava,milk,fishes
                             || item instanceof EnderEyeItem
                             || item == Items.BOW
@@ -180,6 +183,7 @@ public class SlotHandler {
         // We're already de-equipped
         return true;
     }
+
     public void forceEquipSlot(Slot slot) {
         Slot target = PlayerSlot.getEquipSlot();
         clickSlotForce(slot, target.getInventorySlot(), SlotActionType.SWAP);
@@ -188,6 +192,7 @@ public class SlotHandler {
     public boolean forceEquipItem(Item[] matches, boolean unInterruptable) {
         return forceEquipItem(new ItemTarget(matches, 1), unInterruptable);
     }
+
     public boolean forceEquipItem(ItemTarget toEquip, boolean unInterruptable) {
         if (toEquip == null) return false;
 

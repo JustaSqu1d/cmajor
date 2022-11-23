@@ -25,6 +25,7 @@ import java.util.Optional;
 public class FoodChain extends SingleTaskChain {
 
     private static FoodChainConfig _config;
+
     static {
         ConfigHelper.loadConfig("configs/food_chain_settings.json", FoodChainConfig::new, FoodChainConfig.class, newConfig -> _config = newConfig);
     }
@@ -201,7 +202,8 @@ public class FoodChain extends SingleTaskChain {
         int foodLevel = mod.getPlayer().getHungerManager().getFoodLevel();
         float health = mod.getPlayer().getHealth();
         int armor = mod.getPlayer().getArmor();
-        if (health < _config.runDontEatMaxHealth && foodLevel < _config.runDontEatMaxHunger) return false; // RUN NOT EAT
+        if (health < _config.runDontEatMaxHealth && foodLevel < _config.runDontEatMaxHunger)
+            return false; // RUN NOT EAT
         return armor >= _config.canTankHitsAndEatArmor && foodLevel < _config.canTankHitsAndEatMaxHunger; // EAT WE CAN TAKE A FEW HITS
     }
 
@@ -210,10 +212,10 @@ public class FoodChain extends SingleTaskChain {
         double bestFoodScore = Double.NEGATIVE_INFINITY;
         int foodTotal = 0;
         ClientPlayerEntity player = mod.getPlayer();
-        float health = player != null? player.getHealth() : 20;
+        float health = player != null ? player.getHealth() : 20;
         //float toHeal = player != null? 20 - player.getHealth() : 0;
-        float hunger = player != null? player.getHungerManager().getFoodLevel() : 20;
-        float saturation = player != null? player.getHungerManager().getSaturationLevel() : 20;
+        float hunger = player != null ? player.getHungerManager().getFoodLevel() : 20;
+        float saturation = player != null ? player.getHungerManager().getSaturationLevel() : 20;
         // Get best food item + calculate food total
         for (ItemStack stack : mod.getItemStorage().getItemStacksPlayerInventory(true)) {
             if (stack.isFood()) {

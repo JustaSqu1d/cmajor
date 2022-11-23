@@ -141,17 +141,17 @@ public class Fightbot extends Task {
             if (mod.getEntityTracker().getClosestEntity(mod.getPlayer().getPos(), toPunk -> shouldPunk(mod, (PlayerEntity) toPunk), PlayerEntity.class).isPresent()) {
                 setDebugState("Punking.");
                 return new DoToClosestEntityTask(
-                    entity -> {
-                        if (entity instanceof PlayerEntity) {
-                            tryDoFunnyMessageTo(mod, (PlayerEntity) entity);
-                            return new KillPlayerTask(entity.getName().getString());
-                        }
-                        // Should never happen.
-                        Debug.logWarning("This should never happen.");
-                        return _scanTask;
-                    },
-                    interact -> shouldPunk(mod, (PlayerEntity) interact),
-                    PlayerEntity.class
+                        entity -> {
+                            if (entity instanceof PlayerEntity) {
+                                tryDoFunnyMessageTo(mod, (PlayerEntity) entity);
+                                return new KillPlayerTask(entity.getName().getString());
+                            }
+                            // Should never happen.
+                            Debug.logWarning("This should never happen.");
+                            return _scanTask;
+                        },
+                        interact -> shouldPunk(mod, (PlayerEntity) interact),
+                        PlayerEntity.class
                 );
             }
         }
@@ -208,6 +208,25 @@ public class Fightbot extends Task {
 
     private String getRandomFunnyMessage() {
         return "Beep Boop MotherFucker";
+    }
+
+    private static class RunAwayFromPlayersTask extends RunAwayFromEntitiesTask {
+
+        public RunAwayFromPlayersTask(Supplier<List<Entity>> toRunAwayFrom, double distanceToRun) {
+            super(toRunAwayFrom, distanceToRun, true, 0.1);
+            // More lenient progress checker
+            _checker = new MovementProgressChecker(2);
+        }
+
+        @Override
+        protected boolean isEqual(Task other) {
+            return other instanceof RunAwayFromPlayersTask;
+        }
+
+        @Override
+        protected String toDebugString() {
+            return "Running away from players";
+        }
     }
 
     private class ScanChunksInRadius extends SearchChunksExploreTask {
@@ -269,25 +288,6 @@ public class Fightbot extends Task {
         @Override
         protected String toDebugString() {
             return "Scanning around a radius";
-        }
-    }
-
-    private static class RunAwayFromPlayersTask extends RunAwayFromEntitiesTask {
-
-        public RunAwayFromPlayersTask(Supplier<List<Entity>> toRunAwayFrom, double distanceToRun) {
-            super(toRunAwayFrom, distanceToRun, true, 0.1);
-            // More lenient progress checker
-            _checker = new MovementProgressChecker(2);
-        }
-
-        @Override
-        protected boolean isEqual(Task other) {
-            return other instanceof RunAwayFromPlayersTask;
-        }
-
-        @Override
-        protected String toDebugString() {
-            return "Running away from players";
         }
     }
 }
