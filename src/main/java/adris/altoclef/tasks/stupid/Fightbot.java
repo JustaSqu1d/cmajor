@@ -179,7 +179,7 @@ public class Fightbot extends Task {
 
     @Override
     protected String toDebugString() {
-        return "Fightbot ";
+        return "FightBot ";
     }
 
     private boolean isReadyToPunk(AltoClef mod) {
