@@ -45,11 +45,11 @@ public class BeeMovieTask extends Task {
     private final String _uniqueId;
     private final Task _extraSignAcquireTask;
     private final Task _structureMaterialsTask;
-    private boolean _finished = false;
     private final List<String> _cachedStrings = new ArrayList<>();
-    private PlaceSignTask _currentPlace = null;
     // Grab extra resources and acquire extra tools for speed
     private final boolean _sharpenTheAxe = true;
+    private boolean _finished = false;
+    private PlaceSignTask _currentPlace = null;
 
     public BeeMovieTask(String uniqueId, BlockPos start, InputStreamReader input) {
         _uniqueId = uniqueId;

@@ -57,7 +57,7 @@ public class KillPlayerTask extends AbstractKillEntityTask {
             Optional<Entity> Player = mod.getEntityTracker().getPlayerEntity(_playerName).map(Entity.class::cast);
             if (Player.isPresent()) {
                 if (Player.get().isAlive()) {
-                   return Player;
+                    return Player;
                 }
             }
         }

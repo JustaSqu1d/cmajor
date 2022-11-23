@@ -14,7 +14,7 @@ public class EnsureFreeCursorSlotTask extends Task {
 
     @Override
     protected void onStart(AltoClef mod) {
-         // YEET
+        // YEET
     }
 
     @Override
@@ -25,12 +25,12 @@ public class EnsureFreeCursorSlotTask extends Task {
 
 
         if (!cursor.isEmpty()) {
-        Optional<Slot> moveTo = mod.getItemStorage().getSlotThatCanFitInPlayerInventory(cursor, false);
+            Optional<Slot> moveTo = mod.getItemStorage().getSlotThatCanFitInPlayerInventory(cursor, false);
             if (moveTo.isPresent()) {
                 setDebugState("Moving cursor stack back");
                 return new ClickSlotTask(moveTo.get());
-        }
-        if (ItemHelper.canThrowAwayStack(mod, cursor)) {
+            }
+            if (ItemHelper.canThrowAwayStack(mod, cursor)) {
                 setDebugState("Incompatible cursor stack, throwing");
                 return new ThrowCursorTask();
             } else {

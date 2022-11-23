@@ -121,11 +121,9 @@ public class SmeltInFurnaceTask extends ResourceTask {
     static class DoSmeltInFurnaceTask extends DoStuffInContainerTask {
 
         private final SmeltTarget _target;
-        private boolean _ignoreMaterials;
-
-        private FurnaceCache _furnaceCache = new FurnaceCache();
-
         private final ItemTarget _allMaterials;
+        private boolean _ignoreMaterials;
+        private FurnaceCache _furnaceCache = new FurnaceCache();
 
         public DoSmeltInFurnaceTask(SmeltTarget target) {
             super(Blocks.FURNACE, new ItemTarget(Items.FURNACE));
@@ -166,8 +164,8 @@ public class SmeltInFurnaceTask extends ResourceTask {
             double totalFuelInFurnace = ItemHelper.getFuelAmount(_furnaceCache.fuelSlot) + _furnaceCache.burningFuelCount + _furnaceCache.burnPercentage;
             // Fuel needed = (mat_target - out_in_inventory - out_in_furnace - totalFuelInFurnace)
             double fuelNeeded = _ignoreMaterials
-                        ? Math.min(materialTarget.matches(_furnaceCache.materialSlot.getItem()) ? _furnaceCache.materialSlot.getCount() : 0, materialTarget.getTargetCount())
-                        : materialTarget.getTargetCount()
+                    ? Math.min(materialTarget.matches(_furnaceCache.materialSlot.getItem()) ? _furnaceCache.materialSlot.getCount() : 0, materialTarget.getTargetCount())
+                    : materialTarget.getTargetCount()
                     /* - mod.getItemStorage().getItemCountInventoryOnly(materialTarget.getMatches()) */
                     - mod.getItemStorage().getItemCountInventoryOnly(outputTarget.getMatches())
                     - (outputTarget.matches(_furnaceCache.outputSlot.getItem()) ? _furnaceCache.outputSlot.getCount() : 0)
@@ -190,7 +188,7 @@ public class SmeltInFurnaceTask extends ResourceTask {
                 return new MoveInaccessibleItemToInventoryTask(_allMaterials);
             }
 
-           // Make sure we have room for the output in our inventory
+            // Make sure we have room for the output in our inventory
             EnsureFreeInventorySlotTask _freeInventoryTask = new EnsureFreeInventorySlotTask();
             if (_freeInventoryTask.isActive() && !_freeInventoryTask.isFinished(mod) && !mod.getItemStorage().hasEmptyInventorySlot()) {
                 setDebugState("Freeing inventory.");
@@ -215,9 +213,9 @@ public class SmeltInFurnaceTask extends ResourceTask {
              * - Calculate needed fuel input. If we don't have, put it in.
              * - Wait lol
              */
-            ItemStack output   = StorageHelper.getItemStackInSlot(FurnaceSlot.OUTPUT_SLOT);
+            ItemStack output = StorageHelper.getItemStackInSlot(FurnaceSlot.OUTPUT_SLOT);
             ItemStack material = StorageHelper.getItemStackInSlot(FurnaceSlot.INPUT_SLOT_MATERIALS);
-            ItemStack fuel     = StorageHelper.getItemStackInSlot(FurnaceSlot.INPUT_SLOT_FUEL);
+            ItemStack fuel = StorageHelper.getItemStackInSlot(FurnaceSlot.INPUT_SLOT_FUEL);
 
             // Receive from output if present
             if (!output.isEmpty()) {
@@ -275,10 +273,10 @@ public class SmeltInFurnaceTask extends ResourceTask {
                             double delta = needs - fuelAmount;
                             if (
                                     (bestStack == null) ||
-                                    // If our best is above, prioritize lower values
-                                    (closestDelta > 0 && delta < closestDelta) ||
-                                    // If our best is below, prioritize higher below values
-                                    (closestDelta < 0 && delta < 0 && delta > closestDelta)
+                                            // If our best is above, prioritize lower values
+                                            (closestDelta > 0 && delta < closestDelta) ||
+                                            // If our best is below, prioritize higher below values
+                                            (closestDelta < 0 && delta < 0 && delta > closestDelta)
                             ) {
                                 bestStack = stack;
                                 closestDelta = delta;

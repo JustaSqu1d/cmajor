@@ -66,7 +66,7 @@ public class DestroyBlockTask extends Task implements ITaskRequiresGrounded {
         }
 
         // do NOT break if we're standing above it and it's dangerous below...
-        if (!WorldHelper.isSolid(mod, _pos.up()) && mod.getPlayer().getPos().y > _pos.getY() && _pos.isWithinDistance(mod.getPlayer().isOnGround()? mod.getPlayer().getPos() : mod.getPlayer().getPos().add(0, -1, 0), 0.89)) {
+        if (!WorldHelper.isSolid(mod, _pos.up()) && mod.getPlayer().getPos().y > _pos.getY() && _pos.isWithinDistance(mod.getPlayer().isOnGround() ? mod.getPlayer().getPos() : mod.getPlayer().getPos().add(0, -1, 0), 0.89)) {
             if (WorldHelper.dangerousToBreakIfRightAbove(mod, _pos)) {
                 setDebugState("It's dangerous to break as we're right above it, moving away and trying again.");
                 return new RunAwayFromPositionTask(3, _pos.getY(), _pos);
@@ -110,7 +110,7 @@ public class DestroyBlockTask extends Task implements ITaskRequiresGrounded {
             if (!mod.getClientBaritone().getCustomGoalProcess().isActive()) {
                 mod.getClientBaritone().getBuilderProcess().onLostControl();
                 // If we're close, go TO the block (potentially disrupts vines and stuff)
-                mod.getClientBaritone().getCustomGoalProcess().setGoalAndPath(isClose? new GoalBlock(_pos) : new GoalNear(_pos, 1));
+                mod.getClientBaritone().getCustomGoalProcess().setGoalAndPath(isClose ? new GoalBlock(_pos) : new GoalNear(_pos, 1));
             }
         }
 

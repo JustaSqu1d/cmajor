@@ -42,7 +42,7 @@ public class GetToEntityTask extends Task implements ITaskRequiresGrounded {
 
         mod.getClientBaritone().getFollowProcess().follow(entity -> entity == _entity);
         //if (!mod.getClientBaritone().getCustomGoalProcess().isActive()) {
-            //mod.getClientBaritone().getCustomGoalProcess().setGoalAndPath(new GoalFollowEntity(_entity, _closeEnoughDistance));
+        //mod.getClientBaritone().getCustomGoalProcess().setGoalAndPath(new GoalFollowEntity(_entity, _closeEnoughDistance));
         //}
 
         if (mod.getPlayer().isInRange(_entity, _closeEnoughDistance)) {

@@ -23,6 +23,7 @@ import java.util.HashSet;
 public class TimeoutWanderTask extends Task implements ITaskRequiresGrounded {
 
     private static final HashSet<Block> ANNOYING_STUCK_BLOCKS;
+
     static {
         ANNOYING_STUCK_BLOCKS = new HashSet<>();
         ANNOYING_STUCK_BLOCKS.addAll(Arrays.stream(ItemHelper.WOOD_FENCE).map(Block::getBlockFromItem).toList());

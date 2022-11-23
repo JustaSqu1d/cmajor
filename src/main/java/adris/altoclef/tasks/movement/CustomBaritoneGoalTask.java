@@ -78,5 +78,6 @@ public abstract class CustomBaritoneGoalTask extends Task implements ITaskRequir
 
     protected abstract Goal newGoal(AltoClef mod);
 
-    protected void onWander(AltoClef mod) {}
+    protected void onWander(AltoClef mod) {
+    }
 }

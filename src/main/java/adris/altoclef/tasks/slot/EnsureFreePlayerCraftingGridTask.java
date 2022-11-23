@@ -16,13 +16,13 @@ public class EnsureFreePlayerCraftingGridTask extends Task {
     @Override
     protected Task onTick(AltoClef mod) {
         setDebugState("Clearing the 2x2 crafting grid");
-        for(Slot slot : PlayerSlot.CRAFT_INPUT_SLOTS) {
+        for (Slot slot : PlayerSlot.CRAFT_INPUT_SLOTS) {
             ItemStack items = StorageHelper.getItemStackInSlot(slot);
             ItemStack cursor = StorageHelper.getItemStackInCursorSlot();
-            if(!cursor.isEmpty()){
+            if (!cursor.isEmpty()) {
                 return new EnsureFreeCursorSlotTask();
             }
-            if(!items.isEmpty()){
+            if (!items.isEmpty()) {
                 return new ClickSlotTask(slot);
             }
         }

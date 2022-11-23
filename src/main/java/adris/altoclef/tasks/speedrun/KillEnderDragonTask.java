@@ -146,14 +146,14 @@ public class KillEnderDragonTask extends Task {
         if (mod.getEntityTracker().entityFound(EndCrystalEntity.class)) {
             setDebugState("Kamakazeeing crystals");
             return new DoToClosestEntityTask(
-                (toDestroy) -> {
-                    if (toDestroy.isInRange(mod.getPlayer(), 7)) {
-                        mod.getControllerExtras().attack(toDestroy);
-                    }
-                    // Go next to the crystal, arbitrary where we just need to get close.
-                    return new GetToBlockTask(toDestroy.getBlockPos().add(1, 0, 0), false);
-                },
-                EndCrystalEntity.class
+                    (toDestroy) -> {
+                        if (toDestroy.isInRange(mod.getPlayer(), 7)) {
+                            mod.getControllerExtras().attack(toDestroy);
+                        }
+                        // Go next to the crystal, arbitrary where we just need to get close.
+                        return new GetToBlockTask(toDestroy.getBlockPos().add(1, 0, 0), false);
+                    },
+                    EndCrystalEntity.class
             );
         }
 

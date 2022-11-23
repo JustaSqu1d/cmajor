@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class RavageRuinedPortalsTask extends Task {
-    private List<BlockPos> _notRuinedPortalChests = new ArrayList<>();
-    private Task _lootTask;
     public final Item[] LOOT = {
             Items.IRON_NUGGET,
             Items.FLINT,
@@ -46,6 +44,8 @@ public class RavageRuinedPortalsTask extends Task {
             Items.BELL,
             Items.ENCHANTED_GOLDEN_APPLE
     };
+    private List<BlockPos> _notRuinedPortalChests = new ArrayList<>();
+    private Task _lootTask;
 
     public RavageRuinedPortalsTask() {
 
@@ -59,7 +59,7 @@ public class RavageRuinedPortalsTask extends Task {
 
     @Override
     protected Task onTick(AltoClef mod) {
-        if(_lootTask != null && _lootTask.isActive() && !_lootTask.isFinished(mod)) {
+        if (_lootTask != null && _lootTask.isActive() && !_lootTask.isFinished(mod)) {
             return _lootTask;
         }
         Optional<BlockPos> closest = locateClosestUnopenedRuinedPortalChest(mod);

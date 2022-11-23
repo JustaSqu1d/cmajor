@@ -25,24 +25,11 @@ public abstract class Slot {
     // -1 means cursor slot, the slot of the cursor when it holds an item.
     public static final int CURSOR_SLOT_INDEX = -1;
     private static final int UNDEFINED_SLOT_INDEX = -999;
-
+    @SuppressWarnings("StaticInitializerReferencesSubClass")
+    public static Slot UNDEFINED = new PlayerSlot(UNDEFINED_SLOT_INDEX);
     private final int _inventorySlot;
     private final int _windowSlot;
-
     private final boolean _isInventory;
-
-    public Slot(int slot, boolean inventory) {
-        _isInventory = inventory;
-        if (inventory) {
-            _inventorySlot = slot;
-            _windowSlot = UNDEFINED_SLOT_INDEX;
-            //_windowSlot = inventorySlotToWindowSlot(slot);
-        } else {
-            //_inventorySlot = windowSlotToInventorySlot(slot);
-            _inventorySlot = UNDEFINED_SLOT_INDEX;
-            _windowSlot = slot;
-        }
-    }
 
     /*
     private static Slot getFromCurrentScreenAbstract(int slot, boolean inventory) {
@@ -63,12 +50,23 @@ public abstract class Slot {
         }
     }*/
 
-    public boolean isScreenOpen() {
-        return SlotScreenMapping.isScreenOpen(getClass());
+    public Slot(int slot, boolean inventory) {
+        _isInventory = inventory;
+        if (inventory) {
+            _inventorySlot = slot;
+            _windowSlot = UNDEFINED_SLOT_INDEX;
+            //_windowSlot = inventorySlotToWindowSlot(slot);
+        } else {
+            //_inventorySlot = windowSlotToInventorySlot(slot);
+            _inventorySlot = UNDEFINED_SLOT_INDEX;
+            _windowSlot = slot;
+        }
     }
+
     public static Slot getFromCurrentScreen(int windowSlot) {
         return SlotScreenMapping.getFromScreen(windowSlot, false);//getFromCurrentScreenAbstract(windowSlot, false);
     }
+
     public static Slot getFromCurrentScreenInventory(int inventorySlot) {
         return SlotScreenMapping.getFromScreen(inventorySlot, true);//getFromCurrentScreenAbstract(windowSlot, true);
     }
@@ -80,9 +78,10 @@ public abstract class Slot {
     public static Iterable<Slot> getCurrentScreenSlots() {
         return () -> new Iterator<>() {
             final ClientPlayerEntity player = MinecraftClient.getInstance().player;
-            final ScreenHandler handler = player != null? player.currentScreenHandler : null;
+            final ScreenHandler handler = player != null ? player.currentScreenHandler : null;
+            final int MAX = handler != null ? handler.slots.size() : 0;
             int i = -1;
-            final int MAX = handler != null? handler.slots.size() : 0;
+
             @Override
             public boolean hasNext() {
                 return i < MAX;
@@ -97,6 +96,10 @@ public abstract class Slot {
                 return Slot.getFromCurrentScreen(i++);
             }
         };
+    }
+
+    public boolean isScreenOpen() {
+        return SlotScreenMapping.isScreenOpen(getClass());
     }
 
     public int getInventorySlot() {
@@ -146,13 +149,13 @@ public abstract class Slot {
      * @return Whether this slot exists within the player's inventory or in a container that's disconnected from the player's inventory.
      */
     public boolean isSlotInPlayerInventory() {
-        ScreenHandler handler = MinecraftClient.getInstance().player != null? MinecraftClient.getInstance().player.currentScreenHandler : null;
+        ScreenHandler handler = MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.currentScreenHandler : null;
         int windowSlot = getWindowSlot();
         if (handler instanceof PlayerScreenHandler) {
             // Everything visible is player inventory.
             return true;
         }
-        int slotCount = handler != null? handler.slots.size() : 0;
+        int slotCount = handler != null ? handler.slots.size() : 0;
         return windowSlot >= (slotCount - (4 * 9));
     }
 
@@ -163,7 +166,4 @@ public abstract class Slot {
         CHEST_LARGE,
         FURNACE_OR_SMITH
     }
-
-    @SuppressWarnings("StaticInitializerReferencesSubClass")
-    public static Slot UNDEFINED = new PlayerSlot(UNDEFINED_SLOT_INDEX);
 }
