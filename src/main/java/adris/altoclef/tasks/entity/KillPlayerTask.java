@@ -54,12 +54,7 @@ public class KillPlayerTask extends AbstractKillEntityTask {
     @Override
     protected Optional<Entity> getEntityTarget(AltoClef mod) {
         if (mod.getEntityTracker().isPlayerLoaded(_playerName)) {
-            Optional<Entity> Player = mod.getEntityTracker().getPlayerEntity(_playerName).map(Entity.class::cast);
-            if (Player.isPresent()) {
-                if (Player.get().isAlive()) {
-                    return Player;
-                }
-            }
+            return mod.getEntityTracker().getPlayerEntity(_playerName).map(Entity.class::cast);
         }
         return Optional.empty();
     }
