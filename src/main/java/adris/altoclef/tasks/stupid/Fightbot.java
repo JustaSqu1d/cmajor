@@ -183,7 +183,7 @@ public class Fightbot extends Task {
     }
 
     private boolean isReadyToPunk(AltoClef mod) {
-        return true;
+        return mod.getPlayer().isAlive();
     }
 
     private boolean shouldPunk(AltoClef mod, PlayerEntity player) {
