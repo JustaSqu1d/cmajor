@@ -75,6 +75,7 @@ public class MobDefenseChain extends SingleTaskChain {
         _cachedLastPriority = getPriorityInner(mod);
         return _cachedLastPriority;
     }
+
     private float getPriorityInner(AltoClef mod) {
         if (!AltoClef.inGame()) {
             return Float.NEGATIVE_INFINITY;
@@ -395,7 +396,7 @@ public class MobDefenseChain extends SingleTaskChain {
                 double horizontalDistanceSq = delta.x * delta.x + delta.z * delta.z;
                 double verticalDistance = Math.abs(delta.y);
 
-                if (horizontalDistanceSq < ARROW_KEEP_DISTANCE_HORIZONTAL*ARROW_KEEP_DISTANCE_HORIZONTAL && verticalDistance < ARROW_KEEP_DISTANCE_VERTICAL)
+                if (horizontalDistanceSq < ARROW_KEEP_DISTANCE_HORIZONTAL * ARROW_KEEP_DISTANCE_HORIZONTAL && verticalDistance < ARROW_KEEP_DISTANCE_VERTICAL)
                     return true;
             }
         } catch (ConcurrentModificationException e) {
@@ -465,6 +466,7 @@ public class MobDefenseChain extends SingleTaskChain {
     public void setTargetEntity(Entity entity) {
         _targetEntity = entity;
     }
+
     public void resetTargetEntity() {
         _targetEntity = null;
     }

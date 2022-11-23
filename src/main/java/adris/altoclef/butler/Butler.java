@@ -62,7 +62,7 @@ public class Butler {
         WhisperChecker.MessageResult result = this._whisperChecker.receiveMessage(_mod, ourName, msg);
         if (result != null) {
             this.receiveWhisper(result.from, result.message);
-        } else if (ButlerConfig.getInstance().whisperFormatDebug){
+        } else if (ButlerConfig.getInstance().whisperFormatDebug) {
             Debug.logMessage("    Not Parsing: MSG format not found.");
         }
     }
@@ -126,7 +126,7 @@ public class Butler {
         _currentUser = username;
         sendWhisper("Command Executing: " + message, MessagePriority.TIMELY);
         String prefix = ButlerConfig.getInstance().requirePrefixMsg ? _mod.getModSettings().getCommandPrefix() : "";
-        AltoClef.getCommandExecutor().execute(prefix+message, () -> {
+        AltoClef.getCommandExecutor().execute(prefix + message, () -> {
             // On finish
             sendWhisper("Command Finished: " + message, MessagePriority.TIMELY);
             if (!_commandInstantRan) {
