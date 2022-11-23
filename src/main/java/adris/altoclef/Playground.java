@@ -8,31 +8,23 @@ import adris.altoclef.tasks.construction.PlaceBlockNearbyTask;
 import adris.altoclef.tasks.construction.PlaceSignTask;
 import adris.altoclef.tasks.construction.PlaceStructureBlockTask;
 import adris.altoclef.tasks.construction.compound.ConstructNetherPortalObsidianTask;
-import adris.altoclef.tasks.container.SmeltInFurnaceTask;
 import adris.altoclef.tasks.container.StoreInAnyContainerTask;
 import adris.altoclef.tasks.entity.KillEntityTask;
 import adris.altoclef.tasks.misc.*;
 import adris.altoclef.tasks.resources.TradeWithPiglinsTask;
 import adris.altoclef.tasks.examples.ExampleTask2;
-import adris.altoclef.tasks.construction.PlaceSignTask;
-import adris.altoclef.tasks.speedrun.*;
 import adris.altoclef.tasks.stupid.BeeMovieTask;
 import adris.altoclef.tasks.stupid.ReplaceBlocksTask;
 import adris.altoclef.tasks.stupid.SCP173Task;
 import adris.altoclef.tasks.stupid.TerminatorTask;
-import adris.altoclef.tasks.stupid.Fightbot;
+import adris.altoclef.tasks.stupid.FightBot;
 import adris.altoclef.tasks.movement.*;
 import adris.altoclef.tasks.resources.CollectBlazeRodsTask;
 import adris.altoclef.tasks.resources.CollectFlintTask;
 import adris.altoclef.tasks.resources.CollectFoodTask;
-import adris.altoclef.tasks.resources.TradeWithPiglinsTask;
 import adris.altoclef.tasks.speedrun.KillEnderDragonTask;
 import adris.altoclef.tasks.speedrun.KillEnderDragonWithBedsTask;
 import adris.altoclef.tasks.speedrun.WaitForDragonAndPearlTask;
-import adris.altoclef.tasks.stupid.BeeMovieTask;
-import adris.altoclef.tasks.stupid.ReplaceBlocksTask;
-import adris.altoclef.tasks.stupid.SCP173Task;
-import adris.altoclef.tasks.stupid.TerminatorTask;
 import adris.altoclef.util.*;
 import adris.altoclef.util.helpers.WorldHelper;
 import net.minecraft.block.Block;
@@ -304,7 +296,7 @@ public class Playground {
                 mod.runUserTask(new TerminatorTask(mod.getPlayer().getBlockPos(), 900));
                 break;
             case "fightbot":
-                mod.runUserTask(new Fightbot(mod.getPlayer().getBlockPos(), 900));
+                mod.runUserTask(new FightBot(mod.getPlayer().getBlockPos(), 900));
                 break;
             case "replace":
                 // Creates a mini valley of crafting tables.
