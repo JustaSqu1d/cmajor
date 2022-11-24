@@ -52,10 +52,9 @@ dependencies {
     }
 
     // For Discord Bots
-    implementation("net.dv8tion:JDA:5.0.0-alpha.22") {
-        exclude module: 'opus-java'
-    }
+    implementation "net.dv8tion:JDA:${project.jda_version}"
 }
+
 shadowJar {
     configurations = [project.configurations.shadow]
     classifier = 'shadow'

@@ -7,6 +7,7 @@ import adris.altoclef.control.InputControls;
 import adris.altoclef.control.PlayerExtraController;
 import adris.altoclef.control.SlotHandler;
 import adris.altoclef.dpc.Dpc;
+import adris.altoclef.dpc.DpcConfig;
 import adris.altoclef.eventbus.EventBus;
 import adris.altoclef.eventbus.events.ClientRenderEvent;
 import adris.altoclef.eventbus.events.ClientTickEvent;
@@ -25,6 +26,11 @@ import baritone.Baritone;
 import baritone.altoclef.AltoClefSettings;
 import baritone.api.BaritoneAPI;
 import baritone.api.Settings;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -35,12 +41,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 /**
  * Central access point for AltoClef
@@ -148,6 +153,21 @@ public class AltoClef implements ModInitializer {
 
         _butler = new Butler(this);
         _dpc = new Dpc(this);
+
+        String botToken= DpcConfig.getInstance().botToken;
+
+        JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
+                .addEventListeners(new Dpc(this))
+                .build();
+
+        CommandListUpdateAction commands = jda.updateCommands();
+
+        commands.addCommands(
+                Commands.slash("run", "Makes the bot run a command.")
+                        .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
+        );
+
+        commands.queue();
 
         initializeCommands();
 

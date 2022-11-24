@@ -5,20 +5,10 @@ import adris.altoclef.Debug;
 import adris.altoclef.eventbus.EventBus;
 import adris.altoclef.eventbus.events.TaskFinishedEvent;
 import adris.altoclef.ui.MessagePriority;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-import net.minecraft.client.MinecraftClient;
-
-import java.util.EnumSet;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 /**
  * The Dpc system lets authorized players send commands to the bot to execute.
@@ -42,21 +32,6 @@ public class Dpc extends ListenerAdapter {
         _mod = mod;
         _userAuth = new UserAuth(mod);
 
-        String botToken= DpcConfig.getInstance().botToken;
-
-        JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
-                .addEventListeners(new Dpc(mod))
-                .build();
-
-        CommandListUpdateAction commands = jda.updateCommands();
-
-        commands.addCommands(
-                Commands.slash("run", "Makes the bot run a command.")
-                        .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
-        );
-
-        commands.queue();
-
         // Revoke our current user whenever a task finishes.
         EventBus.subscribe(TaskFinishedEvent.class, evt -> {
             if (_currentUser != null) {
@@ -76,7 +51,7 @@ public class Dpc extends ListenerAdapter {
         }
     }
 
-    private void processCommand(SlashCommandInteractionEvent event, String message){
+    private void processCommand(SlashCommandInteractionEvent event, String message) {
         event.deferReply(true).queue(); // Let the user know we received the command before doing anything else
         InteractionHook hook = event.getHook(); // This is a special webhook that allows you to send messages without having permissions in the channel and also allows ephemeral messages
         hook.setEphemeral(true); // All messages here will now be ephemeral implicitly
@@ -90,8 +65,7 @@ public class Dpc extends ListenerAdapter {
         }
 
         if (_userAuth.isUserAuthorized(member)) {
-            // TODO
-            executeWhisper(member, message);
+            executeWhisper(hook, member, message);
         } else {
             if (debug) {
                 Debug.logMessage("    Rejecting: User \"" + member + "\" is not authorized.");
@@ -133,22 +107,22 @@ public class Dpc extends ListenerAdapter {
         return _currentUser != null;
     }
 
-    private void executeWhisper(Member member, String message) {
+    private void executeWhisper(InteractionHook hook, Member member, String message) {
         String prevUser = _currentUser;
         _commandInstantRan = true;
         _commandFinished = false;
         _currentUser = member.getId();
-        sendWhisper("Command Executing: " + message, MessagePriority.TIMELY);
+        hook.sendMessage("Command Executing: `" + message + "`").queue();
         String prefix = DpcConfig.getInstance().requirePrefixMsg ? _mod.getModSettings().getCommandPrefix() : "";
         AltoClef.getCommandExecutor().execute(prefix + message, () -> {
             // On finish
-            sendWhisper("Command Finished: " + message, MessagePriority.TIMELY);
+            hook.editOriginal("Command Finished: " + message).queue();
             if (!_commandInstantRan) {
                 _currentUser = null;
             }
             _commandFinished = true;
         }, e -> {
-            sendWhisper("TASK FAILED: " + e.getMessage(), MessagePriority.ASAP);
+            hook.editOriginal("TASK FAILED: " + e.getMessage()).queue();
             e.printStackTrace();
             _currentUser = null;
             _commandInstantRan = false;
