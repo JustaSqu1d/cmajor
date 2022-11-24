@@ -73,16 +73,16 @@ public class BeatMinecraft2Task extends Task {
     private static final Item[] COLLECT_IRON_ARMOR = ItemHelper.IRON_ARMORS;
     private static final Item[] COLLECT_EYE_ARMOR_END = ItemHelper.DIAMOND_ARMORS;
     private static final ItemTarget[] COLLECT_IRON_GEAR = combine(
-            toItemTargets(Items.IRON_SWORD, 2),
-            toItemTargets(Items.IRON_PICKAXE, 3)
+            toItemTargets(Items.IRON_SWORD, 1),
+            toItemTargets(Items.IRON_PICKAXE, 1)
     );
     private static final ItemTarget[] COLLECT_EYE_GEAR = combine(
             toItemTargets(Items.DIAMOND_SWORD),
-            toItemTargets(Items.DIAMOND_PICKAXE, 3),
+            toItemTargets(Items.DIAMOND_PICKAXE, 1),
             toItemTargets(Items.CRAFTING_TABLE)
     );
     private static final ItemTarget[] COLLECT_IRON_GEAR_MIN = combine(
-            toItemTargets(Items.IRON_SWORD, 2)
+            toItemTargets(Items.IRON_PICKAXE, 1)
     );
     private static final ItemTarget[] COLLECT_EYE_GEAR_MIN = combine(
             toItemTargets(Items.DIAMOND_SWORD),
