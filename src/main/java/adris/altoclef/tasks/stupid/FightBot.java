@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * Roams around the world to terminate Sarah Khaannah
  */
-public class Fightbot extends Task {
+public class FightBot extends Task {
 
     private static final int FEAR_SEE_DISTANCE = 30;
     private static final int FEAR_DISTANCE = 20;
