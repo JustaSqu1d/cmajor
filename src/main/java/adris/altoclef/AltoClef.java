@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -43,7 +44,6 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
@@ -83,6 +83,7 @@ public class AltoClef implements ModInitializer {
     private SlotHandler _slotHandler;
     // Butler
     private Butler _butler;
+
     private Dpc _dpc;
 
     // Are we in game (playing in a server/world)
@@ -152,36 +153,31 @@ public class AltoClef implements ModInitializer {
         _slotHandler = new SlotHandler(this);
 
         _butler = new Butler(this);
+
         _dpc = new Dpc(this);
-
-        String botToken= DpcConfig.getInstance().botToken;
-
+        String botToken = DpcConfig.getInstance().botToken;
         boolean useDiscord = DpcConfig.getInstance().useDpc;
-
-        if (useDiscord){
+        if (useDiscord) {
             JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
                     .addEventListeners(new Dpc(this))
                     .build();
-
             CommandListUpdateAction commands = jda.updateCommands();
-
             commands.addCommands(
                     Commands.slash("run", "Makes the bot run a command.")
                             .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
             );
-
             commands.queue();
-
-            initializeCommands();
         }
+
+        initializeCommands();
 
         // Load settings
         adris.altoclef.Settings.load(newSettings -> {
             _settings = newSettings;
             // Baritone's `acceptableThrowawayItems` should match our own.
             List<Item> baritoneCanPlace = Arrays.stream(_settings.getThrowawayItems(this, true))
-                    .filter(item -> item != Items.SOUL_SAND && item != Items.MAGMA_BLOCK) // Don't place soul sand or magma blocks, that messes us up.
-                    .collect(Collectors.toList());
+                    .filter(item -> item != Items.SOUL_SAND && item != Items.MAGMA_BLOCK && item != Items.SAND && item
+                            != Items.GRAVEL).toList();
             getClientBaritoneSettings().acceptableThrowawayItems.value.addAll(baritoneCanPlace);
             // If we should run an idle command...
             if ((!getUserTaskChain().isActive() || getUserTaskChain().isRunningIdleTask()) && getModSettings().shouldRunIdleCommandWhenNotActive()) {
@@ -189,8 +185,8 @@ public class AltoClef implements ModInitializer {
                 getCommandExecutor().executeWithPrefix(getModSettings().getIdleCommand());
             }
             // Don't break blocks or place blocks where we are explicitly protected.
-            getExtraBaritoneSettings().avoidBlockBreak(blockPos -> _settings.isPositionExplicitelyProtected(blockPos));
-            getExtraBaritoneSettings().avoidBlockPlace(blockPos -> _settings.isPositionExplicitelyProtected(blockPos));
+            getExtraBaritoneSettings().avoidBlockBreak(blockPos -> _settings.isPositionExplicitlyProtected(blockPos));
+            getExtraBaritoneSettings().avoidBlockPlace(blockPos -> _settings.isPositionExplicitlyProtected(blockPos));
         });
 
         // Receive + cancel chat
@@ -254,10 +250,22 @@ public class AltoClef implements ModInitializer {
     }
 
     private void initializeBaritoneSettings() {
-        // Let baritone move items to hotbar to use them
+        getClientBaritoneSettings().freeLook.value = false;
+        getClientBaritoneSettings().overshootTraverse.value = false;
+        getClientBaritoneSettings().allowOvershootDiagonalDescend.value = false;
         getClientBaritoneSettings().allowInventory.value = true;
-        // Pretty safe, minor risk EXCEPT in the nether, where it is a huge risk.
-        getClientBaritoneSettings().allowDiagonalAscend.value = true;
+        getClientBaritoneSettings().allowParkour.value = false;
+        getClientBaritoneSettings().allowParkourAscend.value = false;
+        getClientBaritoneSettings().allowParkourPlace.value = false;
+        getClientBaritoneSettings().allowDiagonalDescend.value = false;
+        getClientBaritoneSettings().allowDiagonalAscend.value = false;
+        getClientBaritoneSettings().blocksToAvoid.value = List.of(Blocks.FLOWERING_AZALEA, Blocks.AZALEA,
+                Blocks.POWDER_SNOW, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM, Blocks.CAVE_VINES,
+                Blocks.CAVE_VINES_PLANT, Blocks.TWISTING_VINES, Blocks.TWISTING_VINES_PLANT, Blocks.SWEET_BERRY_BUSH,
+                Blocks.WARPED_ROOTS, Blocks.CAVE_AIR, Blocks.VOID_AIR, Blocks.VINE, Blocks.GRASS, Blocks.FERN,
+                Blocks.TALL_GRASS, Blocks.LARGE_FERN, Blocks.SMALL_AMETHYST_BUD, Blocks.MEDIUM_AMETHYST_BUD,
+                Blocks.LARGE_AMETHYST_BUD, Blocks.AMETHYST_CLUSTER);
+        // Let baritone move items to hotbar to use them
         // Reduces a bit of far rendering to save FPS
         getClientBaritoneSettings().fadePath.value = true;
         // Don't let baritone scan dropped items, we handle that ourselves.
@@ -265,20 +273,16 @@ public class AltoClef implements ModInitializer {
         // Don't let baritone wait for drops, we handle that ourselves.
         getClientBaritoneSettings().mineDropLoiterDurationMSThanksLouca.value = 0L;
 
-        // Really avoid mobs if we're in danger.
-        getClientBaritoneSettings().mobAvoidanceCoefficient.value = 2.0;
-        getClientBaritoneSettings().mobAvoidanceRadius.value = 12;
-
         // Water bucket placement will be handled by us exclusively
         getExtraBaritoneSettings().configurePlaceBucketButDontFall(true);
 
         // Give baritone more time to calculate paths. Sometimes they can be really far away.
         // Was: 2000L
-        getClientBaritoneSettings().failureTimeoutMS.value = 6000L;
+        getClientBaritoneSettings().failureTimeoutMS.reset();
         // Was: 5000L
-        getClientBaritoneSettings().planAheadFailureTimeoutMS.value = 10000L;
+        getClientBaritoneSettings().planAheadFailureTimeoutMS.reset();
         // Was 100
-        getClientBaritoneSettings().movementTimeoutTicks.value = 200;
+        getClientBaritoneSettings().movementTimeoutTicks.reset();
     }
 
     // List all command sources here.
@@ -320,6 +324,10 @@ public class AltoClef implements ModInitializer {
         return _storageTracker;
     }
 
+    ContainerSubTracker getContainerSubTracker() {
+        return _containerSubTracker;
+    }
+
     /**
      * Tracks loaded entities
      */
@@ -332,10 +340,6 @@ public class AltoClef implements ModInitializer {
      */
     public BlockTracker getBlockTracker() {
         return _blockTracker;
-    }
-
-    ContainerSubTracker getContainerSubTracker() {
-        return _containerSubTracker;
     }
 
     /**
@@ -393,7 +397,9 @@ public class AltoClef implements ModInitializer {
     /**
      * Discord controller. Receives messages from Discord.
      */
-    public Dpc getDpc() { return _dpc; }
+    public Dpc getDpc() {
+        return _dpc;
+    }
 
     /**
      * Sends chat messages (avoids auto-kicking)
@@ -518,4 +524,5 @@ public class AltoClef implements ModInitializer {
             }
         }
     }
+
 }
