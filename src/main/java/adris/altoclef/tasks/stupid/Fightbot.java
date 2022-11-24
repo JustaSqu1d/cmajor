@@ -14,7 +14,6 @@ import adris.altoclef.tasks.movement.SearchChunksExploreTask;
 import adris.altoclef.tasks.resources.CollectFoodTask;
 import adris.altoclef.tasksystem.Task;
 import adris.altoclef.ui.MessagePriority;
-import adris.altoclef.chains.FoodChain;
 import adris.altoclef.util.ItemTarget;
 import adris.altoclef.util.SmeltTarget;
 import adris.altoclef.util.time.TimerGame;
@@ -180,11 +179,10 @@ public class Fightbot extends Task {
 
     @Override
     protected String toDebugString() {
-        return "FightBot ";
+        return "Fightbot ";
     }
 
     private boolean isReadyToPunk(AltoClef mod) {
-        if (mod.getPlayer().getHealth() <= 3) return false;
         return true;
     }
 
