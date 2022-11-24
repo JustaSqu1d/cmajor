@@ -24,26 +24,6 @@ public class ThrowEnderPearlSimpleProjectileTask extends Task {
         _target = target;
     }
 
-    private static boolean cleanThrow(AltoClef mod, float yaw, float pitch) {
-        Rotation rotation = new Rotation(yaw, -1 * pitch);
-        float range = 3f;
-        Vec3d delta = LookHelper.toVec3d(rotation).multiply(range);
-        Vec3d start = LookHelper.getCameraPos(mod);
-        return LookHelper.cleanLineOfSight(start.add(delta), range);
-    }
-
-    private static Rotation calculateThrowLook(AltoClef mod, BlockPos end) {
-        Vec3d start = ProjectileHelper.getThrowOrigin(mod.getPlayer());
-        Vec3d endCenter = WorldHelper.toVec3d(end);
-        double gravity = ProjectileHelper.THROWN_ENTITY_GRAVITY_ACCEL;
-        double speed = 1.5;
-        float yaw = LookHelper.getLookRotation(mod, end).getYaw();
-        double flatDistance = WorldHelper.distanceXZ(start, endCenter);
-        double[] pitches = ProjectileHelper.calculateAnglesForSimpleProjectileMotion(start.y - endCenter.y, flatDistance, speed, gravity);
-        double pitch = cleanThrow(mod, yaw, (float) pitches[0]) ? pitches[0] : pitches[1];
-        return new Rotation(yaw, -1 * (float) pitch);
-    }
-
     @Override
     protected void onStart(AltoClef mod) {
         _thrownTimer.forceElapse();
@@ -91,5 +71,25 @@ public class ThrowEnderPearlSimpleProjectileTask extends Task {
     @Override
     protected String toDebugString() {
         return "Simple Ender Pearling to " + _target;
+    }
+
+    private static boolean cleanThrow(AltoClef mod, float yaw, float pitch) {
+        Rotation rotation = new Rotation(yaw, -1 * pitch);
+        float range = 3f;
+        Vec3d delta = LookHelper.toVec3d(rotation).multiply(range);
+        Vec3d start = LookHelper.getCameraPos(mod);
+        return LookHelper.cleanLineOfSight(start.add(delta), range);
+    }
+
+    private static Rotation calculateThrowLook(AltoClef mod, BlockPos end) {
+        Vec3d start = ProjectileHelper.getThrowOrigin(mod.getPlayer());
+        Vec3d endCenter = WorldHelper.toVec3d(end);
+        double gravity = ProjectileHelper.THROWN_ENTITY_GRAVITY_ACCEL;
+        double speed = 1.5;
+        float yaw = LookHelper.getLookRotation(mod, end).getYaw();
+        double flatDistance = WorldHelper.distanceXZ(start, endCenter);
+        double[] pitches = ProjectileHelper.calculateAnglesForSimpleProjectileMotion(start.y - endCenter.y, flatDistance, speed, gravity);
+        double pitch = cleanThrow(mod, yaw, (float)pitches[0]) ? pitches[0] : pitches[1];
+        return new Rotation(yaw, -1 * (float)pitch);
     }
 }

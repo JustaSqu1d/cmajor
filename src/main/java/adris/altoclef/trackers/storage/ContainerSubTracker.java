@@ -27,10 +27,10 @@ import java.util.function.Predicate;
  */
 public class ContainerSubTracker extends Tracker {
 
-    private final HashMap<Dimension, HashMap<BlockPos, ContainerCache>> _containerCaches = new HashMap<>();
     private boolean _containerOpen;
     private BlockPos _lastBlockPosInteraction;
     private Block _lastBlockInteraction;
+    private final HashMap<Dimension, HashMap<BlockPos, ContainerCache>> _containerCaches = new HashMap<>();
     private ContainerCache _enderChestCache;
     private boolean _hasSentError;
 
@@ -43,7 +43,7 @@ public class ContainerSubTracker extends Tracker {
         // Listen for when we interact with a block
         EventBus.subscribe(BlockInteractEvent.class, evt -> {
             BlockPos blockPos = evt.hitResult.getBlockPos();
-            BlockState bs = evt.world.getBlockState(blockPos);
+            BlockState bs = _mod.getWorld().getBlockState(blockPos);
             onBlockInteract(blockPos, bs.getBlock());
         });
         EventBus.subscribe(ScreenOpenEvent.class, evt -> {
@@ -68,7 +68,6 @@ public class ContainerSubTracker extends Tracker {
             _lastBlockInteraction = block;
         }
     }
-
     private void onScreenOpenFirstTick(final Screen screen) {
         _containerOpen = screen instanceof FurnaceScreen
                 || screen instanceof GenericContainerScreen
@@ -77,14 +76,12 @@ public class ContainerSubTracker extends Tracker {
                 || screen instanceof HopperScreen
                 || screen instanceof ShulkerBoxScreen;
     }
-
     private void onScreenClose() {
         _containerOpen = false;
         _lastBlockPosInteraction = null;
         _lastBlockInteraction = null;
         _hasSentError = false;
     }
-
     public void onServerTick() {
         if (MinecraftClient.getInstance().player == null)
             return;
@@ -156,11 +153,9 @@ public class ContainerSubTracker extends Tracker {
         }
         return cache;
     }
-
     public Optional<ContainerCache> getContainerAtPosition(BlockPos pos) {
         return getContainerAtPosition(WorldHelper.getCurrentDimension(), pos);
     }
-
     public Optional<ContainerCache> getEnderChestStorage() {
         return Optional.ofNullable(_enderChestCache);
     }
@@ -184,8 +179,7 @@ public class ContainerSubTracker extends Tracker {
         }
         return result;
     }
-
-    public List<ContainerCache> getCachedContainers(ContainerType... types) {
+    public List<ContainerCache> getCachedContainers(ContainerType ...types) {
         Set<ContainerType> typeSet = new HashSet<>(Arrays.asList(types));
         return getCachedContainers(cache -> typeSet.contains(cache.getContainerType()));
     }
@@ -216,21 +210,19 @@ public class ContainerSubTracker extends Tracker {
         }
         return Optional.ofNullable(bestCache);
     }
-
-    public Optional<ContainerCache> getClosestTo(Vec3d pos, ContainerType... types) {
+    public Optional<ContainerCache> getClosestTo(Vec3d pos, ContainerType ...types) {
         Set<ContainerType> typeSet = new HashSet<>(Arrays.asList(types));
         return getClosestTo(pos, cache -> typeSet.contains(cache.getContainerType()));
     }
 
-    public List<ContainerCache> getContainersWithItem(Item... items) {
+    public List<ContainerCache> getContainersWithItem(Item ...items) {
         return getCachedContainers(cache -> cache.hasItem(items));
     }
-
-    public Optional<ContainerCache> getClosestWithItem(Vec3d pos, Item... items) {
+    public Optional<ContainerCache> getClosestWithItem(Vec3d pos, Item ...items) {
         return getClosestTo(pos, cache -> cache.hasItem(items));
     }
 
-    public boolean hasItem(Predicate<ContainerCache> accept, Item... items) {
+    public boolean hasItem(Predicate<ContainerCache> accept, Item ...items) {
         for (HashMap<BlockPos, ContainerCache> map : _containerCaches.values()) {
             for (ContainerCache cache : map.values()) {
                 if (cache.hasItem(items) && accept.test(cache))
@@ -239,8 +231,7 @@ public class ContainerSubTracker extends Tracker {
         }
         return false;
     }
-
-    public boolean hasItem(Item... items) {
+    public boolean hasItem(Item ...items) {
         return hasItem(cache -> true, items);
     }
 

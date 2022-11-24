@@ -7,8 +7,8 @@ import adris.altoclef.tasks.construction.PlaceBlockTask;
 import adris.altoclef.tasks.construction.PlaceStructureBlockTask;
 import adris.altoclef.tasks.container.SmeltInFurnaceTask;
 import adris.altoclef.tasks.entity.DoToClosestEntityTask;
-import adris.altoclef.tasks.misc.EquipArmorTask;
 import adris.altoclef.tasks.entity.KillPlayerTask;
+import adris.altoclef.tasks.misc.EquipArmorTask;
 import adris.altoclef.tasks.movement.RunAwayFromEntitiesTask;
 import adris.altoclef.tasks.movement.SearchChunksExploreTask;
 import adris.altoclef.tasks.resources.CollectFoodTask;
@@ -16,12 +16,12 @@ import adris.altoclef.tasksystem.Task;
 import adris.altoclef.ui.MessagePriority;
 import adris.altoclef.util.ItemTarget;
 import adris.altoclef.util.SmeltTarget;
-import adris.altoclef.util.time.TimerGame;
 import adris.altoclef.util.helpers.BaritoneHelper;
 import adris.altoclef.util.helpers.ItemHelper;
 import adris.altoclef.util.helpers.LookHelper;
 import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.progresscheck.MovementProgressChecker;
+import adris.altoclef.util.time.TimerGame;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -276,25 +276,6 @@ public class TerminatorTask extends Task {
         return "Prepare to get punked, kid";
     }
 
-    private static class RunAwayFromPlayersTask extends RunAwayFromEntitiesTask {
-
-        public RunAwayFromPlayersTask(Supplier<List<Entity>> toRunAwayFrom, double distanceToRun) {
-            super(toRunAwayFrom, distanceToRun, true, 0.1);
-            // More lenient progress checker
-            _checker = new MovementProgressChecker(2);
-        }
-
-        @Override
-        protected boolean isEqual(Task other) {
-            return other instanceof RunAwayFromPlayersTask;
-        }
-
-        @Override
-        protected String toDebugString() {
-            return "Running away from players";
-        }
-    }
-
     private class ScanChunksInRadius extends SearchChunksExploreTask {
 
         private final BlockPos _center;
@@ -354,6 +335,25 @@ public class TerminatorTask extends Task {
         @Override
         protected String toDebugString() {
             return "Scanning around a radius";
+        }
+    }
+
+    private static class RunAwayFromPlayersTask extends RunAwayFromEntitiesTask {
+
+        public RunAwayFromPlayersTask(Supplier<List<Entity>> toRunAwayFrom, double distanceToRun) {
+            super(toRunAwayFrom, distanceToRun, true, 0.1);
+            // More lenient progress checker
+            _checker = new MovementProgressChecker();
+        }
+
+        @Override
+        protected boolean isEqual(Task other) {
+            return other instanceof RunAwayFromPlayersTask;
+        }
+
+        @Override
+        protected String toDebugString() {
+            return "Running away from players";
         }
     }
 }

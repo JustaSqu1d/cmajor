@@ -3,12 +3,12 @@ package adris.altoclef.control;
 import adris.altoclef.AltoClef;
 import adris.altoclef.Debug;
 import adris.altoclef.util.ItemTarget;
-import adris.altoclef.util.slots.PlayerSlot;
-import adris.altoclef.util.time.TimerGame;
 import adris.altoclef.util.helpers.ItemHelper;
 import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.slots.CursorSlot;
+import adris.altoclef.util.slots.PlayerSlot;
 import adris.altoclef.util.slots.Slot;
+import adris.altoclef.util.time.TimerGame;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
@@ -43,26 +43,24 @@ public class SlotHandler {
         _slotActionTimer.setInterval(_mod.getModSettings().getContainerItemMoveDelay());
         return _slotActionTimer.elapsed();
     }
-
     public void registerSlotAction() {
         _mod.getItemStorage().registerSlotAction();
         _slotActionTimer.reset();
     }
 
+
     public void clickSlot(Slot slot, int mouseButton, SlotActionType type) {
         if (!canDoSlotAction()) return;
 
         if (slot.getWindowSlot() == -1) {
-            Debug.logWarning("Tried to click the cursor slot. Shouldn't do this!");
+            clickSlot(PlayerSlot.UNDEFINED, 0, SlotActionType.PICKUP);
             return;
         }
-
         // NOT THE CASE! We may have something in the cursor slot to place.
         //if (getItemStackInSlot(slot).isEmpty()) return getItemStackInSlot(slot);
 
         clickWindowSlot(slot.getWindowSlot(), mouseButton, type);
     }
-
     private void clickSlotForce(Slot slot, int mouseButton, SlotActionType type) {
         forceAllowNextSlotAction();
         clickSlot(slot, mouseButton, type);
@@ -84,6 +82,20 @@ public class SlotHandler {
         }
     }
 
+    public void forceEquipItemToOffhand(Item toEquip) {
+        if (StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT).getItem() == toEquip) {
+            return;
+        }
+        List<Slot> currentItemSlot = _mod.getItemStorage().getSlotsWithItemPlayerInventory(false,
+                toEquip);
+        Slot itemInSlot = currentItemSlot.get(0);
+        if (!Slot.isCursor(itemInSlot)) {
+            _mod.getSlotHandler().clickSlot(itemInSlot, 0, SlotActionType.PICKUP);
+        } else {
+            _mod.getSlotHandler().clickSlot(PlayerSlot.OFFHAND_SLOT, 0, SlotActionType.PICKUP);
+        }
+    }
+
     public boolean forceEquipItem(Item toEquip) {
 
         // Already equipped
@@ -100,7 +112,7 @@ public class SlotHandler {
             Slot slot = itemSlots.get(0);
             int hotbar = 1;
             //_mod.getPlayer().getInventory().swapSlotWithHotbar();
-            clickSlotForce(Objects.requireNonNull(slot), inCursor ? 0 : hotbar, inCursor ? SlotActionType.PICKUP : SlotActionType.SWAP);
+            clickSlotForce(Objects.requireNonNull(slot), inCursor? 0 : hotbar, inCursor? SlotActionType.PICKUP : SlotActionType.SWAP);
             //registerSlotAction();
             return true;
         }
@@ -111,10 +123,9 @@ public class SlotHandler {
     public boolean forceDeequipHitTool() {
         return forceDeequip(stack -> stack.getItem() instanceof ToolItem);
     }
-
     public void forceDeequipRightClickableItem() {
         forceDeequip(stack -> {
-                    Item item = stack.getItem();
+            Item item = stack.getItem();
                     return item instanceof BucketItem // water,lava,milk,fishes
                             || item instanceof EnderEyeItem
                             || item == Items.BOW
@@ -134,8 +145,8 @@ public class SlotHandler {
                             || item == Items.COMPASS
                             || item instanceof EmptyMapItem
                             || item instanceof Wearable
-                            || item == Items.SHIELD
-                            || item == Items.LEAD;
+                            || item == Items.LEAD
+                            || item == Items.SHIELD;
                 }
         );
     }
@@ -161,7 +172,7 @@ public class SlotHandler {
                     }
                 }
                 if (ItemHelper.canThrowAwayStack(_mod, cursor)) {
-                    clickSlotForce(Slot.UNDEFINED, 0, SlotActionType.PICKUP);
+                    clickSlotForce(PlayerSlot.UNDEFINED, 0, SlotActionType.PICKUP);
                     return true;
                 }
                 // Can't throw :(
@@ -183,7 +194,6 @@ public class SlotHandler {
         // We're already de-equipped
         return true;
     }
-
     public void forceEquipSlot(Slot slot) {
         Slot target = PlayerSlot.getEquipSlot();
         clickSlotForce(slot, target.getInventorySlot(), SlotActionType.SWAP);
@@ -192,7 +202,6 @@ public class SlotHandler {
     public boolean forceEquipItem(Item[] matches, boolean unInterruptable) {
         return forceEquipItem(new ItemTarget(matches, 1), unInterruptable);
     }
-
     public boolean forceEquipItem(ItemTarget toEquip, boolean unInterruptable) {
         if (toEquip == null) return false;
 

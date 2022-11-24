@@ -10,18 +10,17 @@ import java.util.Arrays;
 
 public class CustomCommand extends Command {
     private static CustomTaskConfig _ctc;
-
     static {
         ConfigHelper.loadConfig("configs/CustomTasks.json", CustomTaskConfig::new, CustomTaskConfig.class, newConfig -> _ctc = newConfig);
     }
 
 
-    public CustomCommand() throws CommandException {
-        super(_ctc.prefix, "does a custom action", new Arg(String.class, "task name"));
-    }
-
     public static CustomTaskConfig getConfig() {
         return _ctc;
+    }
+
+    public CustomCommand() throws CommandException {
+        super(_ctc.prefix, "does a custom action", new Arg(String.class,"task name"));
     }
 
     @Override
@@ -61,7 +60,7 @@ public class CustomCommand extends Command {
                 }
             }
             AltoClef.getCommandExecutor().execute(mod.getModSettings().getCommandPrefix() + commandToExecute.toString().replaceAll(",", "").replaceAll("\\?", ","));
-        } else {
+        }else{
 
         }
     }

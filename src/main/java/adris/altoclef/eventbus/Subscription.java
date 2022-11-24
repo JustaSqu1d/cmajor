@@ -18,7 +18,6 @@ public class Subscription<T> {
     public void delete() {
         _shouldDelete = true;
     }
-
     public boolean shouldDelete() {
         return _shouldDelete;
     }

@@ -3,6 +3,7 @@ package adris.altoclef.tasks.speedrun;
 import adris.altoclef.AltoClef;
 import adris.altoclef.Debug;
 import adris.altoclef.tasks.InteractWithBlockTask;
+import adris.altoclef.tasks.construction.PutOutFireTask;
 import adris.altoclef.tasks.movement.GetToBlockTask;
 import adris.altoclef.tasks.movement.GetToXZTask;
 import adris.altoclef.tasksystem.Task;
@@ -19,21 +20,13 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class KillEnderDragonWithBedsTask extends Task {
-
     private final Task _whenNotPerchingTask;
 
     private BlockPos _endPortalTop;
     private Task _positionTask;
 
     public KillEnderDragonWithBedsTask(IDragonWaiter notPerchingOverride) {
-        _whenNotPerchingTask = (Task) notPerchingOverride;
-    }
-
-    private static BlockPos locateExitPortalTop(AltoClef mod) {
-        if (!mod.getChunkTracker().isChunkLoaded(new BlockPos(0, 64, 0))) return null;
-        int height = WorldHelper.getGroundHeight(mod, 0, 0, Blocks.BEDROCK);
-        if (height != -1) return new BlockPos(0, height, 0);
-        return null;
+        _whenNotPerchingTask = (Task)notPerchingOverride;
     }
 
     @Override
@@ -82,16 +75,16 @@ public class KillEnderDragonWithBedsTask extends Task {
             perching = false;
         }
 
-        ((IDragonWaiter) _whenNotPerchingTask).setPerchState(perching);
+        ((IDragonWaiter)_whenNotPerchingTask).setPerchState(perching);
 
         // When the dragon is not perching...
         if (_whenNotPerchingTask.isActive() && !_whenNotPerchingTask.isFinished(mod)) {
             setDebugState("Dragon not perching, performing special behavior...");
-
             return _whenNotPerchingTask;
         }
 
         if (perching) {
+            mod.getFoodChain().shouldStop(true);
             BlockPos targetStandPosition = _endPortalTop.add(-1, -1, 0);
             BlockPos playerPosition = mod.getPlayer().getBlockPos();
 
@@ -112,6 +105,14 @@ public class KillEnderDragonWithBedsTask extends Task {
             BlockPos bedTargetPosition = _endPortalTop.up();
             boolean bedPlaced = mod.getBlockTracker().blockIsValid(bedTargetPosition, ItemHelper.itemsToBlocks(ItemHelper.BED));
             if (!bedPlaced) {
+                if (mod.getWorld().getBlockState(bedTargetPosition).getBlock() == Blocks.FIRE) {
+                    setDebugState("Taking out fire.");
+                    if (mod.getPlayer().isOnGround()) {
+                        // Jump
+                        mod.getInputControls().tryPress(Input.JUMP);
+                    }
+                    return new PutOutFireTask(bedTargetPosition);
+                }
                 setDebugState("Placing bed");
                 // If no bed, place bed.
                 // Fire messes up our "reach" so we just assume we're good when we're above a height.
@@ -154,14 +155,14 @@ public class KillEnderDragonWithBedsTask extends Task {
             }
             return null;
         }
-
+        mod.getFoodChain().shouldStop(false);
         // Start our "Not perching task"
         return _whenNotPerchingTask;
     }
 
     @Override
     protected void onStop(AltoClef mod, Task interruptTask) {
-
+        mod.getFoodChain().shouldStop(false);
     }
 
     @Override
@@ -177,5 +178,12 @@ public class KillEnderDragonWithBedsTask extends Task {
     @Override
     protected String toDebugString() {
         return "Bedding the Ender Dragon";
+    }
+
+    private static BlockPos locateExitPortalTop(AltoClef mod) {
+        if (!mod.getChunkTracker().isChunkLoaded(new BlockPos(0, 64, 0))) return null;
+        int height = WorldHelper.getGroundHeight(mod, 0, 0, Blocks.BEDROCK);
+        if (height != -1) return new BlockPos(0, height, 0);
+        return null;
     }
 }
