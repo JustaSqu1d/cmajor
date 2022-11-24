@@ -4,7 +4,6 @@ import adris.altoclef.Debug;
 import adris.altoclef.util.time.BaseTimer;
 import adris.altoclef.util.time.TimerReal;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
