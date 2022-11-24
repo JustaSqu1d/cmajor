@@ -190,20 +190,14 @@ public class TimeoutWanderTask extends Task implements ITaskRequiresGrounded {
             case END -> {
                 timer2 = timer2 + timer1;
                 if (timer2 >= 500) {
-                    MinecraftClient.getInstance().options.getViewDistance().setValue(12);
-                    MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(1.0);
                     timer2 = 0;
                 }
             }
             case OVERWORLD, NETHER -> {
                 timer2 = timer2 + timer1;
                 if (timer2 >= 500) {
-                    MinecraftClient.getInstance().options.getViewDistance().setValue(12);
-                    MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(1.0);
                 }
                 if (timer2 >= 1000) {
-                    MinecraftClient.getInstance().options.getViewDistance().setValue(32);
-                    MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(5.0);
                     timer2 = 0;
                 }
             }

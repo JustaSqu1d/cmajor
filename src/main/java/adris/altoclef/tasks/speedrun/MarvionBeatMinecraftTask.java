@@ -554,9 +554,6 @@ public class MarvionBeatMinecraftTask extends Task {
                 if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                     timer1++;
                     if (timer1 >= 500) {
-                        if (_config.renderDistanceManipulation) {
-                            MinecraftClient.getInstance().options.getViewDistance().setValue(12);
-                        }
                         timer1 = 0;
                     }
                 }
@@ -568,17 +565,9 @@ public class MarvionBeatMinecraftTask extends Task {
             if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                 timer3++;
                 if (timer3 >= 1000) {
-                    if (_config.renderDistanceManipulation) {
-                        MinecraftClient.getInstance().options.getViewDistance().setValue(32);
-                        MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(5.0);
-                    }
                     timer3 = 0;
                 }
                 if (timer3 >= 500) {
-                    if (_config.renderDistanceManipulation) {
-                        MinecraftClient.getInstance().options.getViewDistance().setValue(12);
-                        MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(1.0);
-                    }
                 }
             }
         }
@@ -589,10 +578,6 @@ public class MarvionBeatMinecraftTask extends Task {
             if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                 timer1++;
                 if (timer1 >= 500) {
-                    if (_config.renderDistanceManipulation) {
-                        MinecraftClient.getInstance().options.getViewDistance().setValue(2);
-                        MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(0.5);
-                    }
                     timer1 = 0;
                 }
             }
@@ -602,10 +587,6 @@ public class MarvionBeatMinecraftTask extends Task {
                     _config.renderDistanceManipulation) {
                 timer1++;
                 if (timer1 >= 500) {
-                    if (_config.renderDistanceManipulation) {
-                        MinecraftClient.getInstance().options.getViewDistance().setValue(12);
-                        MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(1.0);
-                    }
                     timer1 = 0;
                 }
             }
@@ -762,10 +743,6 @@ public class MarvionBeatMinecraftTask extends Task {
 
         // End stuff.
         if (WorldHelper.getCurrentDimension() == Dimension.END) {
-            if (_config.renderDistanceManipulation) {
-                MinecraftClient.getInstance().options.getViewDistance().setValue(12);
-                MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(1.0);
-            }
             // If we have bed, do bed strats, otherwise punk normally.
             updateCachedEndItems(mod);
             // Grab beds
@@ -906,8 +883,6 @@ public class MarvionBeatMinecraftTask extends Task {
                     if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                         timer1++;
                         if (timer1 >= 500) {
-                            MinecraftClient.getInstance().options.getViewDistance().setValue(2);
-                            MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(0.5);
                             timer1 = 0;
                         }
                     }
@@ -946,8 +921,6 @@ public class MarvionBeatMinecraftTask extends Task {
                     if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                         timer1++;
                         if (timer1 >= 500) {
-                            MinecraftClient.getInstance().options.getViewDistance().setValue(2);
-                            MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(0.5);
                             timer1 = 0;
                         }
                     }
@@ -1058,10 +1031,6 @@ public class MarvionBeatMinecraftTask extends Task {
                         if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                             timer1++;
                             if (timer1 >= 500) {
-                                if (_config.renderDistanceManipulation) {
-                                    MinecraftClient.getInstance().options.getViewDistance().setValue(32);
-                                    MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(5.0);
-                                }
                                 timer1 = 0;
                             }
                         }
@@ -1312,8 +1281,6 @@ public class MarvionBeatMinecraftTask extends Task {
                         if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                             timer1++;
                             if (timer1 >= 500) {
-                                MinecraftClient.getInstance().options.getViewDistance().setValue(2);
-                                MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(0.5);
                                 timer1 = 0;
                             }
                         }
@@ -1337,12 +1304,6 @@ public class MarvionBeatMinecraftTask extends Task {
                 }
                 if (shouldForce(mod, _getPorkchopTask)) {
                     setDebugState("Getting porkchop just for fun.");
-                    if (_config.renderDistanceManipulation) {
-                        if (!mod.getClientBaritone().getExploreProcess().isActive()) {
-                            MinecraftClient.getInstance().options.getViewDistance().setValue(32);
-                            MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(5.0);
-                        }
-                    }
                     return _getPorkchopTask;
                 } else {
                     _getPorkchopTask = null;
@@ -1363,11 +1324,6 @@ public class MarvionBeatMinecraftTask extends Task {
                     if (_config.renderDistanceManipulation) {
                         if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                             timer1++;
-                            if (timer1 >= 500) {
-                                MinecraftClient.getInstance().options.getViewDistance().setValue(2);
-                                MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(0.5);
-                                timer1 = 0;
-                            }
                         }
                     }
                     return _smeltTask;
@@ -1454,11 +1410,6 @@ public class MarvionBeatMinecraftTask extends Task {
                     if (_config.renderDistanceManipulation) {
                         if (!mod.getClientBaritone().getExploreProcess().isActive()) {
                             timer1++;
-                            if (timer1 >= 500) {
-                                MinecraftClient.getInstance().options.getViewDistance().setValue(32);
-                                MinecraftClient.getInstance().options.getEntityDistanceScaling().setValue(5.0);
-                                timer1 = 0;
-                            }
                         }
                     }
                     searchBiomeTask = new SearchWithinBiomeTask(BiomeKeys.PLAINS);
