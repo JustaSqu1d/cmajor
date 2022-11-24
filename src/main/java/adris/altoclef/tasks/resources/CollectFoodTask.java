@@ -10,7 +10,6 @@ import adris.altoclef.tasks.container.CraftInTableTask;
 import adris.altoclef.tasks.container.SmeltInSmokerTask;
 import adris.altoclef.tasks.movement.PickupDroppedItemTask;
 import adris.altoclef.tasks.movement.TimeoutWanderTask;
-import adris.altoclef.tasks.speedrun.MarvionBeatMinecraftTask;
 import adris.altoclef.tasksystem.Task;
 import adris.altoclef.util.CraftingRecipe;
 import adris.altoclef.util.ItemTarget;
@@ -166,9 +165,6 @@ public class CollectFoodTask extends Task {
         if (_smeltTask != null && _smeltTask.isActive() && !_smeltTask.isFinished(mod)) {
             // TODO: If we don't have cooking materials, cancel.
             setDebugState("Cooking...");
-            if (MarvionBeatMinecraftTask.getConfig().renderDistanceManipulation) {
-                MinecraftClient.getInstance().options.setServerViewDistance(2);
-            }
             return _smeltTask;
         }
 
