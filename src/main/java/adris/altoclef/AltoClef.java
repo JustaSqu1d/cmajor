@@ -156,20 +156,24 @@ public class AltoClef implements ModInitializer {
 
         String botToken= DpcConfig.getInstance().botToken;
 
-        JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
-                .addEventListeners(new Dpc(this))
-                .build();
+        boolean useDiscord = DpcConfig.getInstance().useDpc;
 
-        CommandListUpdateAction commands = jda.updateCommands();
+        if (useDiscord){
+            JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
+                    .addEventListeners(new Dpc(this))
+                    .build();
 
-        commands.addCommands(
-                Commands.slash("run", "Makes the bot run a command.")
-                        .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
-        );
+            CommandListUpdateAction commands = jda.updateCommands();
 
-        commands.queue();
+            commands.addCommands(
+                    Commands.slash("run", "Makes the bot run a command.")
+                            .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
+            );
 
-        initializeCommands();
+            commands.queue();
+
+            initializeCommands();
+        }
 
         // Load settings
         adris.altoclef.Settings.load(newSettings -> {

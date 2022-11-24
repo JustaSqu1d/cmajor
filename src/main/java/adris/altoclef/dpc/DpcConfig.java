@@ -10,6 +10,8 @@ public class DpcConfig {
         ConfigHelper.loadConfig("configs/discord.json", DpcConfig::new, DpcConfig.class, newConfig -> _instance = newConfig);
     }
 
+    public boolean useDpc = false;
+
     /**
      * If true, will use blacklist for rejecting users from using your player as a Dpc
      */
