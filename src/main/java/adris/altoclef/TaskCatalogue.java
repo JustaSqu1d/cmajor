@@ -202,14 +202,13 @@ public class TaskCatalogue {
             smelt("smooth_quartz", Items.SMOOTH_QUARTZ, "quartz_block");
             smelt("smooth_basalt", Items.SMOOTH_BASALT, "basalt");
             smelt("glass", Items.GLASS, "sand").dontMineIfPresent();
-            smelt("iron_ingot", Items.IRON_INGOT, "raw_iron", Items.IRON_ORE);
             smelt("copper_ingot", Items.COPPER_INGOT, "raw_copper", Items.COPPER_ORE);
             smelt("charcoal", Items.CHARCOAL, "log");
             smelt("brick", Items.BRICK, "clay_ball");
             smelt("nether_brick", Items.NETHER_BRICK, "netherrack");
             smelt("green_dye", Items.GREEN_DYE, "cactus");
             simple("gold_ingot", Items.GOLD_INGOT, CollectGoldIngotTask::new).anyDimension(); // accounts for nether too
-            shapedRecipe3x3Block("iron_ingot", Items.IRON_INGOT, "iron_nugget");
+            simple("iron_ingot", Items.IRON_INGOT, CollectIronIngotTask::new).anyDimension(); // accounts for nether too
             shapedRecipe3x3Block("iron_block", Items.IRON_BLOCK, "iron_ingot");
             shapedRecipe3x3Block("gold_block", Items.GOLD_BLOCK, "gold_ingot");
             shapedRecipe3x3Block("copper_block", Items.COPPER_BLOCK, "copper_ingot");
