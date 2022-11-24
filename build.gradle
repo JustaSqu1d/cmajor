@@ -50,8 +50,11 @@ dependencies {
         modImplementation "cabaletta:baritone-unoptimized-fabric:1.18.2"
         include "cabaletta:baritone-unoptimized-fabric:1.18.2"
     }
-    //modImplementation 'baritone-api-fabric:baritone-api-fabric:1.6.3'
-    //implementation files('baritone-plus/build/libs/baritone-unoptimized-fabric-1.6.3.jar')
+
+    // For Discord Bots
+    implementation("net.dv8tion:JDA:5.0.0-alpha.22") {
+        exclude module: 'opus-java'
+    }
 }
 shadowJar {
     configurations = [project.configurations.shadow]

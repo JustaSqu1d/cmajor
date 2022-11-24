@@ -6,6 +6,7 @@ import adris.altoclef.commandsystem.CommandExecutor;
 import adris.altoclef.control.InputControls;
 import adris.altoclef.control.PlayerExtraController;
 import adris.altoclef.control.SlotHandler;
+import adris.altoclef.dpc.Dpc;
 import adris.altoclef.eventbus.EventBus;
 import adris.altoclef.eventbus.events.ClientRenderEvent;
 import adris.altoclef.eventbus.events.ClientTickEvent;
@@ -77,6 +78,7 @@ public class AltoClef implements ModInitializer {
     private SlotHandler _slotHandler;
     // Butler
     private Butler _butler;
+    private Dpc _dpc;
 
     // Are we in game (playing in a server/world)
     public static boolean inGame() {
@@ -145,6 +147,7 @@ public class AltoClef implements ModInitializer {
         _slotHandler = new SlotHandler(this);
 
         _butler = new Butler(this);
+        _dpc = new Dpc(this);
 
         initializeCommands();
 
@@ -362,6 +365,11 @@ public class AltoClef implements ModInitializer {
     public Butler getButler() {
         return _butler;
     }
+
+    /**
+     * Discord controller. Receives messages from Discord.
+     */
+    public Dpc getDpc() { return _dpc; }
 
     /**
      * Sends chat messages (avoids auto-kicking)

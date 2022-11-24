@@ -2,10 +2,11 @@ package adris.altoclef.dpc;
 
 import adris.altoclef.AltoClef;
 import adris.altoclef.util.helpers.ConfigHelper;
+import net.dv8tion.jda.api.entities.Member;
 
 public class UserAuth {
-    private static final String BLACKLIST_PATH = "altoclef_Dpc_blacklist.txt";
-    private static final String WHITELIST_PATH = "altoclef_Dpc_whitelist.txt";
+    private static final String BLACKLIST_PATH = "altoclef_dpc_blacklist.txt";
+    private static final String WHITELIST_PATH = "altoclef_dpc_whitelist.txt";
     private final AltoClef _mod;
     private UserListFile _blacklist;
     private UserListFile _whitelist;
@@ -26,14 +27,16 @@ public class UserAuth {
         UserListFile.load(WHITELIST_PATH, newList -> _whitelist = newList);
     }
 
-    public boolean isUserAuthorized(String username) {
+    public boolean isUserAuthorized(Member member) {
+
+        String name = member.getId().toString();
 
         // Blacklist gets first priority.
-        if (DpcConfig.getInstance().useDpcBlacklist && _blacklist.containsUser(username)) {
+        if (DpcConfig.getInstance().useDpcBlacklist && _blacklist.containsUser(name)) {
             return false;
         }
         if (DpcConfig.getInstance().useDpcWhitelist) {
-            return _whitelist.containsUser(username);
+            return _whitelist.containsUser(name);
         }
 
         // By default accept everyone.
