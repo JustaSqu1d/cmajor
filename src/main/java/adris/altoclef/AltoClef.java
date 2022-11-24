@@ -206,6 +206,7 @@ public class AltoClef implements ModInitializer {
             }
         }
 
+        // TODO: should this go here?
         _storageTracker.setDirty();
         _containerSubTracker.onServerTick();
         _miscBlockTracker.tick();
