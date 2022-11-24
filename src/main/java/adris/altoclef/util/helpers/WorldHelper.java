@@ -32,7 +32,7 @@ import java.util.*;
 public interface WorldHelper {
 
     // God bless 1.18
-    int WORLD_CEILING_Y = 255;
+    int WORLD_CEILING_Y = 320;
     int WORLD_FLOOR_Y = -64;
 
     /**
@@ -99,8 +99,8 @@ public interface WorldHelper {
     static Dimension getCurrentDimension() {
         ClientWorld world = MinecraftClient.getInstance().world;
         if (world == null) return Dimension.OVERWORLD;
-        if (world.getDimension().ultrawarm()) return Dimension.NETHER;
-        if (world.getDimension().natural()) return Dimension.OVERWORLD;
+        if (world.getDimension().isUltrawarm()) return Dimension.NETHER;
+        if (world.getDimension().isNatural()) return Dimension.OVERWORLD;
         return Dimension.END;
     }
 
