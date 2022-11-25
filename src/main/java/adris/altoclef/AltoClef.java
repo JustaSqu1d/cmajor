@@ -6,8 +6,8 @@ import adris.altoclef.commandsystem.CommandExecutor;
 import adris.altoclef.control.InputControls;
 import adris.altoclef.control.PlayerExtraController;
 import adris.altoclef.control.SlotHandler;
-//import adris.altoclef.dpc.Dpc;
-//import adris.altoclef.dpc.DpcConfig;
+import adris.altoclef.dpc.Dpc;
+import adris.altoclef.dpc.DpcConfig;
 import adris.altoclef.eventbus.EventBus;
 import adris.altoclef.eventbus.events.ClientRenderEvent;
 import adris.altoclef.eventbus.events.ClientTickEvent;
@@ -26,11 +26,11 @@ import baritone.Baritone;
 import baritone.altoclef.AltoClefSettings;
 import baritone.api.BaritoneAPI;
 import baritone.api.Settings;
-//import net.dv8tion.jda.api.JDA;
-//import net.dv8tion.jda.api.JDABuilder;
-//import net.dv8tion.jda.api.interactions.commands.build.Commands;
-//import net.dv8tion.jda.api.requests.GatewayIntent;
-//import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -45,7 +45,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-//import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 /**
  * Central access point for AltoClef
@@ -83,7 +83,7 @@ public class AltoClef implements ModInitializer {
     private SlotHandler _slotHandler;
     // Butler
     private Butler _butler;
-//    private Dpc _dpc;
+    private Dpc _dpc;
 
     // Are we in game (playing in a server/world)
     public static boolean inGame() {
@@ -152,28 +152,28 @@ public class AltoClef implements ModInitializer {
         _slotHandler = new SlotHandler(this);
 
         _butler = new Butler(this);
-//        _dpc = new Dpc(this);
-//
-//        String botToken= DpcConfig.getInstance().botToken;
+        _dpc = new Dpc(this);
 
-//        boolean useDiscord = DpcConfig.getInstance().useDpc;
+        String botToken= DpcConfig.getInstance().botToken;
 
-//        if (useDiscord){
-//            JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
-//                    .addEventListeners(new Dpc(this))
-//                    .build();
-//
-//            CommandListUpdateAction commands = jda.updateCommands();
-//
-//            commands.addCommands(
-//                    Commands.slash("run", "Makes the bot run a command.")
-//                            .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
-//            );
-//
-//            commands.queue();
-//
-//        }
-        initializeCommands();
+        boolean useDiscord = DpcConfig.getInstance().useDpc;
+
+        if (useDiscord){
+            JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
+                    .addEventListeners(new Dpc(this))
+                    .build();
+
+            CommandListUpdateAction commands = jda.updateCommands();
+
+            commands.addCommands(
+                    Commands.slash("run", "Makes the bot run a command.")
+                            .addOption(STRING, "content", "A valid command with arguments", true) // you can add required options like this too
+            );
+
+            commands.queue();
+
+            initializeCommands();
+        }
 
         // Load settings
         adris.altoclef.Settings.load(newSettings -> {
@@ -393,7 +393,7 @@ public class AltoClef implements ModInitializer {
     /**
      * Discord controller. Receives messages from Discord.
      */
-//    public Dpc getDpc() { return _dpc; }
+    public Dpc getDpc() { return _dpc; }
 
     /**
      * Sends chat messages (avoids auto-kicking)

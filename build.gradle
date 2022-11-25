@@ -32,20 +32,15 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
 
     // Jackson JSON
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.0'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
-    // For Discord Bots
-//    implementation('net.dv8tion:JDA:5.0.0-alpha.22')
-//    include('net.dv8tion:JDA:5.0.0-alpha.22')
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.0-rc3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.0-rc3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0-rc3'
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
-    shadow('com.fasterxml.jackson.core:jackson-core:2.14.0')
-    shadow('com.fasterxml.jackson.core:jackson-annotations:2.14.0')
-    shadow('com.fasterxml.jackson.core:jackson-databind:2.14.0')
-
-//    shadow('net.dv8tion:JDA:5.0.0-alpha.22')
+    shadow('com.fasterxml.jackson.core:jackson-core:2.14.0-rc3')
+    shadow('com.fasterxml.jackson.core:jackson-annotations:2.14.0-rc3')
+    shadow('com.fasterxml.jackson.core:jackson-databind:2.14.0-rc3')
 
     // Thank you georgeagostino for fixing my garbage
     if (getProject().hasProperty("altoclef.development")) {
@@ -56,6 +51,8 @@ dependencies {
         include "cabaletta:baritone-unoptimized-fabric:1.18.2"
     }
 
+    // For Discord Bots
+    implementation "net.dv8tion:JDA:${project.jda_version}"
 }
 
 shadowJar {
@@ -97,11 +94,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = "sources"
     from sourceSets.main.allSource
 }
-
-java {
-    withSourcesJar()
-}
-
 
 jar {
     from "LICENSE"
