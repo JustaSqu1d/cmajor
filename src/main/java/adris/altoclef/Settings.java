@@ -239,8 +239,6 @@ public class Settings implements IFailableConfigFile {
      */
     private boolean autoEat = true;
 
-    private boolean renderDistanceManipulation = false;
-
     /**
      * If true, MLG/No Fall Bucket if we're knocked off course and falling.
      */
@@ -583,9 +581,6 @@ public class Settings implements IFailableConfigFile {
         return !limitFuelsToSupportedFuels || supportedFuels.contains(item);
     }
 
-    public boolean getRenderDistanceManipulation() {
-        return renderDistanceManipulation;
-    }
     @JsonIgnore
     public Item[] getSupportedFuelItems() {
         return supportedFuels.toArray(Item[]::new);
