@@ -22,6 +22,11 @@ repositories {
     }
 }
 
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
+
 dependencies {
     //to change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
@@ -52,7 +57,8 @@ dependencies {
     }
 
     // For Discord Bots
-    implementation "net.dv8tion:JDA:${project.jda_version}"
+    extraLibs group: "net.dv8tion", name: "JDA", version: "${project.jda_version}"
+    implementation("net.dv8tion:JDA:${project.jda_version}")
 }
 
 shadowJar {
@@ -96,7 +102,11 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 jar {
-    from "LICENSE"
+    def libBuildDir = mkdir "${buildDir}/resources/main/lib"
+    copy {
+        from { configurations.extraLibs }
+        into { libBuildDir }
+    }
 }
 
 // configure the maven publication

@@ -172,8 +172,9 @@ public class AltoClef implements ModInitializer {
 
             commands.queue();
 
-            initializeCommands();
         }
+
+        initializeCommands();
 
         // Load settings
         adris.altoclef.Settings.load(newSettings -> {
