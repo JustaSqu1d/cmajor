@@ -86,7 +86,7 @@ public class BeatMinecraft2Task extends Task {
     );
     private static final ItemTarget[] COLLECT_EYE_GEAR_MIN = combine(
             toItemTargets(Items.DIAMOND_SWORD),
-            toItemTargets(Items.DIAMOND_PICKAXE, 3)
+            toItemTargets(Items.DIAMOND_PICKAXE, 1)
     );
     private static final ItemTarget[] IRON_GEAR = combine(
             toItemTargets(Items.IRON_SWORD, 1),
