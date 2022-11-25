@@ -60,12 +60,12 @@ public class FightBot extends Task {
     private Task _runAwayTask;
     private String _currentVisibleTarget;
 
-    public Fightbot(BlockPos center, double scanRadius, Predicate<PlayerEntity> canTerminate) {
+    public FightBot(BlockPos center, double scanRadius, Predicate<PlayerEntity> canTerminate) {
         _canTerminate = canTerminate;
         _scanTask = new ScanChunksInRadius(center, scanRadius);
     }
 
-    public Fightbot(BlockPos center, double scanRadius) {
+    public FightBot(BlockPos center, double scanRadius) {
         this(center, scanRadius, accept -> true);
     }
 
@@ -175,7 +175,7 @@ public class FightBot extends Task {
 
     @Override
     protected boolean isEqual(Task other) {
-        return other instanceof Fightbot;
+        return other instanceof FightBot;
     }
 
     @Override
