@@ -1,5 +1,8 @@
 package adris.altoclef.commands;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 class CustomTaskConfig {
     public String prefix = "custom2";
     public CustomTaskEntry[] customTasks = new CustomTaskEntry[0];

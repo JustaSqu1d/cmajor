@@ -1,7 +1,6 @@
 package adris.altoclef;
 
-import adris.altoclef.tasks.CraftInInventoryTask;
-import adris.altoclef.tasks.ResourceTask;
+import adris.altoclef.tasks.*;
 import adris.altoclef.tasks.container.CraftInTableTask;
 import adris.altoclef.tasks.container.SmeltInFurnaceTask;
 import adris.altoclef.tasks.container.UpgradeInSmithingTableTask;
@@ -203,13 +202,13 @@ public class TaskCatalogue {
             smelt("smooth_quartz", Items.SMOOTH_QUARTZ, "quartz_block");
             smelt("smooth_basalt", Items.SMOOTH_BASALT, "basalt");
             smelt("glass", Items.GLASS, "sand").dontMineIfPresent();
-            simple("iron_ingot", Items.IRON_INGOT, CollectIronIngotTask::new).forceDimension(Dimension.OVERWORLD);
             smelt("copper_ingot", Items.COPPER_INGOT, "raw_copper", Items.COPPER_ORE);
             smelt("charcoal", Items.CHARCOAL, "log");
             smelt("brick", Items.BRICK, "clay_ball");
             smelt("nether_brick", Items.NETHER_BRICK, "netherrack");
             smelt("green_dye", Items.GREEN_DYE, "cactus");
             simple("gold_ingot", Items.GOLD_INGOT, CollectGoldIngotTask::new).anyDimension(); // accounts for nether too
+            simple("iron_ingot", Items.IRON_INGOT, CollectIronIngotTask::new).anyDimension(); // accounts for nether too
             shapedRecipe3x3Block("iron_block", Items.IRON_BLOCK, "iron_ingot");
             shapedRecipe3x3Block("gold_block", Items.GOLD_BLOCK, "gold_ingot");
             shapedRecipe3x3Block("copper_block", Items.COPPER_BLOCK, "copper_ingot");

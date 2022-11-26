@@ -6,13 +6,12 @@ import adris.altoclef.tasks.ResourceTask;
 import adris.altoclef.tasks.construction.PlaceObsidianBucketTask;
 import adris.altoclef.tasks.movement.TimeoutWanderTask;
 import adris.altoclef.tasksystem.Task;
-import adris.altoclef.util.Dimension;
 import adris.altoclef.util.ItemTarget;
 import adris.altoclef.util.MiningRequirement;
+import adris.altoclef.util.time.TimerGame;
 import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.helpers.WorldHelper;
 import adris.altoclef.util.progresscheck.MovementProgressChecker;
-import adris.altoclef.util.time.TimerGame;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
@@ -145,7 +144,7 @@ public class CollectObsidianTask extends ResourceTask {
             return new MineAndCollectTask(new ItemTarget(Items.OBSIDIAN, _count), new Block[]{Blocks.OBSIDIAN}, MiningRequirement.DIAMOND);
         }
 
-        if (WorldHelper.getCurrentDimension() != Dimension.OVERWORLD) {
+        if (!mod.getWorld().getDimension().isUltrawarm()) {
             setDebugState("We can't place water, so we're wandering.");
             return new TimeoutWanderTask();
         }

@@ -6,6 +6,7 @@ import adris.altoclef.util.progresscheck.IProgressChecker;
 import adris.altoclef.util.progresscheck.LinearProgressChecker;
 import adris.altoclef.util.progresscheck.ProgressCheckerRetry;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 

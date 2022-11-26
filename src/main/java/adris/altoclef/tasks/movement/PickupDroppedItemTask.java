@@ -13,7 +13,6 @@ import adris.altoclef.util.helpers.StlHelper;
 import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.helpers.WorldHelper;
 import adris.altoclef.util.progresscheck.MovementProgressChecker;
-import net.minecraft.block.*;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
@@ -25,32 +24,15 @@ import java.util.Optional;
 import java.util.Set;
 
 public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEntity> implements ITaskRequiresGrounded {
+
     private static final Task getPickaxeFirstTask = new SatisfyMiningRequirementTask(MiningRequirement.STONE);
     // Not clean practice, but it helps keep things self contained I think.
     private static boolean isGettingPickaxeFirstFlag = false;
-    private final MovementProgressChecker stuckCheck = new MovementProgressChecker();
-    private final MovementProgressChecker _progressChecker = new MovementProgressChecker();
     private final ItemTarget[] _itemTargets;
-
-    // This happens all the time in mineshafts and swamps/jungles
     private final Set<ItemEntity> _blacklist = new HashSet<>();
+    private final MovementProgressChecker _progressChecker = new MovementProgressChecker(3);
+    private final TimeoutWanderTask _wanderTask = new TimeoutWanderTask(20);
     private final boolean _freeInventoryIfFull;
-    Block[] annoyingBlocks = new Block[]{
-            Blocks.VINE,
-            Blocks.NETHER_SPROUTS,
-            Blocks.CAVE_VINES,
-            Blocks.CAVE_VINES_PLANT,
-            Blocks.TWISTING_VINES,
-            Blocks.TWISTING_VINES_PLANT,
-            Blocks.WEEPING_VINES_PLANT,
-            Blocks.LADDER,
-            Blocks.BIG_DRIPLEAF,
-            Blocks.BIG_DRIPLEAF_STEM,
-            Blocks.SMALL_DRIPLEAF,
-            Blocks.TALL_GRASS,
-            Blocks.GRASS
-    };
-    private Task _unstuckTask = null;
     // Am starting to regret not making this a singleton
     private AltoClef _mod;
     private boolean _collectingPickaxeForThisResource = false;
@@ -64,62 +46,17 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
     public PickupDroppedItemTask(ItemTarget target, boolean freeInventoryIfFull) {
         this(new ItemTarget[]{target}, freeInventoryIfFull);
     }
+
     public PickupDroppedItemTask(Item item, int targetCount, boolean freeInventoryIfFull) {
         this(new ItemTarget(item, targetCount), freeInventoryIfFull);
     }
+
     public PickupDroppedItemTask(Item item, int targetCount) {
         this(item, targetCount, true);
     }
 
-    private static BlockPos[] generateSides(BlockPos pos) {
-        return new BlockPos[]{
-                pos.add(1, 0, 0),
-                pos.add(-1, 0, 0),
-                pos.add(0, 0, 1),
-                pos.add(0, 0, -1),
-                pos.add(1, 0, -1),
-                pos.add(1, 0, 1),
-                pos.add(-1, 0, -1),
-                pos.add(-1, 0, 1)
-        };
-    }
-
     public static boolean isIsGettingPickaxeFirst(AltoClef mod) {
         return isGettingPickaxeFirstFlag && mod.getModSettings().shouldCollectPickaxeFirst();
-    }
-
-    private boolean isAnnoying(AltoClef mod, BlockPos pos) {
-        for (Block AnnoyingBlocks : annoyingBlocks) {
-            return mod.getWorld().getBlockState(pos).getBlock() == AnnoyingBlocks ||
-                    mod.getWorld().getBlockState(pos).getBlock() instanceof DoorBlock ||
-                    mod.getWorld().getBlockState(pos).getBlock() instanceof FenceBlock ||
-                    mod.getWorld().getBlockState(pos).getBlock() instanceof FenceGateBlock ||
-                    mod.getWorld().getBlockState(pos).getBlock() instanceof FlowerBlock;
-        }
-        return false;
-    }
-
-    private BlockPos stuckInBlock(AltoClef mod) {
-        BlockPos p = mod.getPlayer().getBlockPos();
-        if (isAnnoying(mod, p)) return p;
-        if (isAnnoying(mod, p.up())) return p.up();
-        BlockPos[] toCheck = generateSides(p);
-        for (BlockPos check : toCheck) {
-            if (isAnnoying(mod, check)) {
-                return check;
-            }
-        }
-        BlockPos[] toCheckHigh = generateSides(p.up());
-        for (BlockPos check : toCheckHigh) {
-            if (isAnnoying(mod, check)) {
-                return check;
-            }
-        }
-        return null;
-    }
-
-    private Task getFenceUnstuckTask() {
-        return new SafeRandomShimmyTask();
     }
 
     public boolean isCollectingPickaxeForThis() {
@@ -128,8 +65,7 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
 
     @Override
     protected void onStart(AltoClef mod) {
-        _progressChecker.reset();
-        stuckCheck.reset();
+
     }
 
     @Override
@@ -139,26 +75,12 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
 
     @Override
     protected Task onTick(AltoClef mod) {
-        if (mod.getClientBaritone().getPathingBehavior().isPathing()) {
-            _progressChecker.reset();
-        }
-        if (_unstuckTask != null && _unstuckTask.isActive() && !_unstuckTask.isFinished(mod) && stuckInBlock(mod) != null) {
-            setDebugState("Getting unstuck from block.");
-            stuckCheck.reset();
-            // Stop other tasks, we are JUST shimmying
-            mod.getClientBaritone().getCustomGoalProcess().onLostControl();
-            mod.getClientBaritone().getExploreProcess().onLostControl();
-            return _unstuckTask;
-        }
-        if (!_progressChecker.check(mod) || !stuckCheck.check(mod)) {
-            BlockPos blockStuck = stuckInBlock(mod);
-            if (blockStuck != null) {
-                _unstuckTask = getFenceUnstuckTask();
-                return _unstuckTask;
-            }
-            stuckCheck.reset();
-        }
         _mod = mod;
+        if (_wanderTask.isActive() && !_wanderTask.isFinished(mod)) {
+            setDebugState("Wandering after blacklisting item...");
+            _progressChecker.reset();
+            return _wanderTask;
+        }
 
         // If we're getting a pickaxe for THIS resource...
         if (isIsGettingPickaxeFirst(mod) && _collectingPickaxeForThisResource && !StorageHelper.miningRequirementMetInventory(mod, MiningRequirement.STONE)) {
@@ -173,10 +95,7 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
         }
 
         if (!_progressChecker.check(mod)) {
-            mod.getClientBaritone().getPathingBehavior().cancelEverything();
-            mod.getClientBaritone().getPathingBehavior().forceCancel();
-            mod.getClientBaritone().getExploreProcess().onLostControl();
-            mod.getClientBaritone().getCustomGoalProcess().onLostControl();
+            _progressChecker.reset();
             if (_currentDrop != null && !_currentDrop.getStack().isEmpty()) {
                 // We might want to get a pickaxe first.
                 if (!isGettingPickaxeFirstFlag && mod.getModSettings().shouldCollectPickaxeFirst() && !StorageHelper.miningRequirementMetInventory(mod, MiningRequirement.STONE)) {
@@ -189,10 +108,8 @@ public class PickupDroppedItemTask extends AbstractDoToClosestObjectTask<ItemEnt
                 Debug.logMessage(StlHelper.toString(_blacklist, element -> element == null ? "(null)" : element.getStack().getItem().getTranslationKey()));
                 Debug.logMessage("Failed to pick up drop, suggesting it's unreachable.");
                 _blacklist.add(_currentDrop);
-                TimeoutWanderTask wanderTask = new TimeoutWanderTask(5);
-                _progressChecker.reset();
                 mod.getEntityTracker().requestEntityUnreachable(_currentDrop);
-                return wanderTask;
+                return _wanderTask;
             }
         }
 

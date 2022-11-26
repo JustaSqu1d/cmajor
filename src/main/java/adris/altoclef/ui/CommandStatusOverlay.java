@@ -1,17 +1,18 @@
 package adris.altoclef.ui;
 
 import adris.altoclef.AltoClef;
+import adris.altoclef.Debug;
 import adris.altoclef.tasksystem.Task;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 public class CommandStatusOverlay {
 

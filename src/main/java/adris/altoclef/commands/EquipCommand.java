@@ -7,6 +7,9 @@ import adris.altoclef.util.ItemTarget;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.tag.ItemTags;
+
+import java.util.Locale;
 
 public class EquipCommand extends Command {
     public EquipCommand() throws CommandException {

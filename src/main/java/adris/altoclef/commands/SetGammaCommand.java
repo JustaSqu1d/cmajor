@@ -19,5 +19,7 @@ public class SetGammaCommand extends Command {
         double gammaValue = parser.get(Double.class);
         Debug.logMessage("Gamma set to " + gammaValue);
         MinecraftClient.getInstance().options.gamma = gammaValue;
+
     }
+
 }

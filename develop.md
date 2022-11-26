@@ -14,8 +14,7 @@ Clone project and import. I'd suggest using JetBrain's IntelliJ to import the pr
 your Project & Gradle Settings!
 
 1) Open IntelliJ IDEA
-2)
-Click `File > New > Project from Version Control...` ![image](https://user-images.githubusercontent.com/13367955/146222866-42fa307b-016e-40a6-98bc-6e2428cde2dc.png)
+2) Click `File > New > Project from Version Control...` ![image](https://user-images.githubusercontent.com/13367955/146222866-42fa307b-016e-40a6-98bc-6e2428cde2dc.png)
 3) Copy + Paste the altoclef clone URL and Clone (find
    here: )![image](https://user-images.githubusercontent.com/13367955/146223264-0cc436c0-4c08-4adc-b948-0ca3da4fbd6f.png)
 4) Go to `File > Settings`, search `Gradle` and make sure your Gradle JVM is set to a JDK that's version 16 (IntelliJ
@@ -47,8 +46,7 @@ If you wish to make edits to that fork you can do so locally if you follow these
 4) Now within `altoclef`, pass `-Paltoclef.development` as a parameter when running `gradle build`
    (In IntelliJ, go to the build dropdown -> `Edit Configurations`, then duplicate the `altoclef [build]` configuration.
    In this duplicate, paste `-Paltoclef.development` into the Arguments text field.)
-5) When you build and pass `-Paltoclef.development`, Alto Clef should now use the jar file inside your custom `baritone`
-   fork instead of pulling from online. This lets you rapidly test local changes to baritone.
+5) When you build and pass `-Paltoclef.development`, Alto Clef should now use the jar file inside your custom `baritone` fork instead of pulling from online. This lets you rapidly test local changes to baritone.
 
 ## Task Development Guides
 

@@ -12,6 +12,7 @@ import adris.altoclef.util.ItemTarget;
 import adris.altoclef.util.baritone.GoalAnd;
 import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.helpers.WorldHelper;
+
 import baritone.api.pathing.goals.GoalComposite;
 import baritone.api.pathing.goals.GoalGetToBlock;
 import baritone.api.pathing.goals.GoalYLevel;

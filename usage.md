@@ -45,17 +45,17 @@ Test commands are temporary/only exist as an experiment, but some of these might
 For example, `@test terminate` runs the terminator.
 Here's a list of some highlights.
 
-| test name   | what it does                                                                                                                                                                                                                                                                                         |
-|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `terminate` | Runs the terminator task. When without diamond gear, the bot flees players and obtains diamond gear + food. When diamond gear is equipped, the bot hunts any nearby players down and searches for any chunks that were last seen to have players in them.                                            |
-| `deadmeme`  | Expects a file to exist in your `.minecraft` directory called `test.txt`. Reads from this file, then displays the text contents of the file by placing signs in a line. Dubbed the "Bee Movie Task" for stupid reasons. Will automatically collect signs and building materials if the bot runs out. |
-| `173`       | Attacks any player that doesn't have direct line of sight to the bot and stands still otherwise. Like a weeping angel.                                                                                                                                                                               | 
-| `replace`   | Replace grass block within around 100 blocks with crafting tables. Frequently fails when replacing grass blocks next to water.                                                                                                                                                                       |
-| `piglin`    | Collects 12 ender pearls via piglin bartering.                                                                                                                                                                                                                                                       |
-| `stacked`   | Collects diamond armor, a sword and a crafting table.                                                                                                                                                                                                                                                |
-| `netherite` | Same as `stacked` but for netherite gear.                                                                                                                                                                                                                                                            |
-| `sign`      | Place a sign nearby that says "Hello there!"                                                                                                                                                                                                                                                         |
-| `bed`       | Right clicks a nearby bed to set the bot's spawnpoint, placing one if it does not exist.                                                                                                                                                                                                             |
+| test name | what it does |
+| ------- | ------------ |
+| `terminate` | Runs the terminator task. When without diamond gear, the bot flees players and obtains diamond gear + food. When diamond gear is equipped, the bot hunts any nearby players down and searches for any chunks that were last seen to have players in them. |
+| `deadmeme` | Expects a file to exist in your `.minecraft` directory called `test.txt`. Reads from this file, then displays the text contents of the file by placing signs in a line. Dubbed the "Bee Movie Task" for stupid reasons. Will automatically collect signs and building materials if the bot runs out. |
+| `173` | Attacks any player that doesn't have direct line of sight to the bot and stands still otherwise. Like a weeping angel. | 
+| `replace` | Replace grass block within around 100 blocks with crafting tables. Frequently fails when replacing grass blocks next to water. |
+| `piglin` | Collects 12 ender pearls via piglin bartering. |
+| `stacked` | Collects diamond armor, a sword and a crafting table. |
+| `netherite` | Same as `stacked` but for netherite gear.
+| `sign` | Place a sign nearby that says "Hello there!" |
+| `bed` | Right clicks a nearby bed to set the bot's spawnpoint, placing one if it does not exist. |
 
 ## Bot Settings/Configuration
 
@@ -95,7 +95,7 @@ If the server's whisper /msg system doesn't send players a message that looks li
 being
 picked up by altoclef, you can append the server's custom whisper format in the `whisperFormats` setting.
 
-**NOTE:** At least for now, you must escape brackets and parenthesis. Example: To receive messages that look
+**NOTE:** At least for now, you must escape brackets and paranthesis. Example: To receive messages that look
 like `[Player -> me] message` the format string is `\[{from} -> {to}\] {message}`
 
 **WARNING:** Be careful with this one as well, as the bot will trust these formats for ALL non-player chat messages.

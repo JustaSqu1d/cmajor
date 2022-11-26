@@ -32,7 +32,7 @@ public class StoreInAnyContainerTask extends Task {
     private final boolean _getIfNotPresent;
     private final HashSet<BlockPos> _dungeonChests = new HashSet<>();
     private final HashSet<BlockPos> _nonDungeonChests = new HashSet<>();
-    private final MovementProgressChecker _progressChecker = new MovementProgressChecker();
+    private final MovementProgressChecker _progressChecker = new MovementProgressChecker(2);
     private final ContainerStoredTracker _storedItems = new ContainerStoredTracker(slot -> true);
     private BlockPos _currentChestTry = null;
 
