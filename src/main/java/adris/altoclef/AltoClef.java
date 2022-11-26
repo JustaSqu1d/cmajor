@@ -268,7 +268,6 @@ public class AltoClef implements ModInitializer {
                 Blocks.CAVE_VINES_PLANT, Blocks.TWISTING_VINES, Blocks.TWISTING_VINES_PLANT, Blocks.SWEET_BERRY_BUSH,
                 Blocks.WARPED_ROOTS, Blocks.SMALL_AMETHYST_BUD, Blocks.MEDIUM_AMETHYST_BUD, Blocks.LARGE_AMETHYST_BUD,
                 Blocks.AMETHYST_CLUSTER);
-        getClientBaritoneSettings().blocksToAvoidBreaking.value = List.of(Blocks.GRAY_WOOL);
         // Let baritone move items to hotbar to use them
         // Reduces a bit of far rendering to save FPS
         getClientBaritoneSettings().fadePath.value = true;
@@ -282,13 +281,11 @@ public class AltoClef implements ModInitializer {
 
         // Give baritone more time to calculate paths. Sometimes they can be really far away.
         // Was: 2000L
-        getClientBaritoneSettings().failureTimeoutMS.value = 6000L;
+        getClientBaritoneSettings().failureTimeoutMS.reset();
         // Was: 5000L
-        getClientBaritoneSettings().planAheadFailureTimeoutMS.value = 10000L;
+        getClientBaritoneSettings().planAheadFailureTimeoutMS.reset();
         // Was 100
-        getClientBaritoneSettings().movementTimeoutTicks.value = 200;
-
-        getClientBaritoneSettings().useSwordToMine.value = false;
+        getClientBaritoneSettings().movementTimeoutTicks.reset();
     }
 
     // List all command sources here.
