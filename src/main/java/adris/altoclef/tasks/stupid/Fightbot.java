@@ -2,31 +2,19 @@ package adris.altoclef.tasks.stupid;
 
 import adris.altoclef.AltoClef;
 import adris.altoclef.Debug;
-import adris.altoclef.TaskCatalogue;
-import adris.altoclef.tasks.construction.PlaceBlockTask;
-import adris.altoclef.tasks.construction.PlaceStructureBlockTask;
-import adris.altoclef.tasks.container.SmeltInFurnaceTask;
 import adris.altoclef.tasks.entity.DoToClosestEntityTask;
-import adris.altoclef.tasks.misc.EquipArmorTask;
 import adris.altoclef.tasks.entity.KillPlayerTask;
 import adris.altoclef.tasks.movement.RunAwayFromEntitiesTask;
 import adris.altoclef.tasks.movement.SearchChunksExploreTask;
 import adris.altoclef.tasks.resources.CollectFoodTask;
 import adris.altoclef.tasksystem.Task;
 import adris.altoclef.ui.MessagePriority;
-import adris.altoclef.chains.FoodChain;
-import adris.altoclef.util.ItemTarget;
-import adris.altoclef.util.SmeltTarget;
-import adris.altoclef.util.time.TimerGame;
 import adris.altoclef.util.helpers.BaritoneHelper;
-import adris.altoclef.util.helpers.ItemHelper;
 import adris.altoclef.util.helpers.LookHelper;
-import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.progresscheck.MovementProgressChecker;
+import adris.altoclef.util.time.TimerGame;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -42,7 +30,7 @@ import java.util.stream.Stream;
 /**
  * Roams around the world to terminate Sarah Khaannah
  */
-public class FightBot extends Task {
+public class Fightbot extends Task {
 
     private static final int FEAR_SEE_DISTANCE = 30;
     private static final int FEAR_DISTANCE = 20;
@@ -60,12 +48,12 @@ public class FightBot extends Task {
     private Task _runAwayTask;
     private String _currentVisibleTarget;
 
-    public FightBot(BlockPos center, double scanRadius, Predicate<PlayerEntity> canTerminate) {
+    public Fightbot(BlockPos center, double scanRadius, Predicate<PlayerEntity> canTerminate) {
         _canTerminate = canTerminate;
         _scanTask = new ScanChunksInRadius(center, scanRadius);
     }
 
-    public FightBot(BlockPos center, double scanRadius) {
+    public Fightbot(BlockPos center, double scanRadius) {
         this(center, scanRadius, accept -> true);
     }
 
@@ -175,7 +163,7 @@ public class FightBot extends Task {
 
     @Override
     protected boolean isEqual(Task other) {
-        return other instanceof FightBot;
+        return other instanceof Fightbot;
     }
 
     @Override
