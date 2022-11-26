@@ -488,7 +488,7 @@ public class AltoClef implements ModInitializer {
         return _mlgBucketChain;
     }
 
-    public void log(String message) {
+    public void log (String message) {
         log(message, MessagePriority.TIMELY);
     }
 
