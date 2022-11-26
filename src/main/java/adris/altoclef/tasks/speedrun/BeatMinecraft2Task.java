@@ -379,8 +379,6 @@ public class BeatMinecraft2Task extends Task {
     protected Task onTick(AltoClef mod) {
         boolean eyeGearSatisfied = StorageHelper.isArmorEquippedAll(mod, COLLECT_EYE_ARMOR);
         boolean ironGearSatisfied = StorageHelper.isArmorEquippedAll(mod, COLLECT_IRON_ARMOR);
-        boolean starterGearSatisfied = StorageHelper.itemTargetsMet(mod, IRON_GEAR);
-
         if (mod.getItemStorage().hasItem(Items.DIAMOND_PICKAXE)) {
             mod.getBehaviour().setBlockBreakAdditionalPenalty(0);
         } else {
@@ -843,40 +841,40 @@ public class BeatMinecraft2Task extends Task {
         }
         // Portable crafting table.
         // If we're NOT using our crafting table right now and there's one nearby, grab it.
-        if ((!_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END && _config.rePickupCraftingTable &&
+        if (!_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END && _config.rePickupCraftingTable &&
                 !mod.getItemStorage().hasItem(Items.CRAFTING_TABLE) && !thisOrChildSatisfies(isCraftingTableTask)
                 && (mod.getBlockTracker().anyFound(blockPos -> WorldHelper.canBreak(mod, blockPos) &&
                 WorldHelper.canReach(mod, blockPos), Blocks.CRAFTING_TABLE) ||
-                mod.getEntityTracker().itemDropped(Items.CRAFTING_TABLE))) && starterGearSatisfied) {
+                mod.getEntityTracker().itemDropped(Items.CRAFTING_TABLE))) {
             setDebugState("Picking up the crafting table while we are at it.");
             return new MineAndCollectTask(Items.CRAFTING_TABLE, 1, new Block[]{Blocks.CRAFTING_TABLE}, MiningRequirement.HAND);
         }
-        if ((_config.rePickupSmoker && !_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END &&
+        if (_config.rePickupSmoker && !_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END &&
                 !mod.getItemStorage().hasItem(Items.SMOKER) &&
                 (mod.getBlockTracker().anyFound(blockPos -> WorldHelper.canBreak(mod, blockPos) &&
                         WorldHelper.canReach(mod, blockPos), Blocks.SMOKER)
                         || mod.getEntityTracker().itemDropped(Items.SMOKER)) && _smeltTask == null &&
-                _foodTask == null) && starterGearSatisfied) {
+                _foodTask == null) {
             setDebugState("Picking up the smoker while we are at it.");
             return new MineAndCollectTask(Items.SMOKER, 1, new Block[]{Blocks.SMOKER}, MiningRequirement.WOOD);
         }
-        if ((_config.rePickupFurnace && !_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END &&
+        if (_config.rePickupFurnace && !_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END &&
                 !mod.getItemStorage().hasItem(Items.FURNACE) &&
                 (mod.getBlockTracker().anyFound(blockPos -> WorldHelper.canBreak(mod, blockPos) &&
                         WorldHelper.canReach(mod, blockPos), Blocks.FURNACE) ||
                         mod.getEntityTracker().itemDropped(Items.FURNACE)) && _starterGearTask == null &&
                 _shieldTask == null && _ironGearTask == null && _gearTask == null && !_goToNetherTask.isActive() &&
-                !_ranStrongholdLocator && !mod.getModSettings().shouldUseBlastFurnace()) && starterGearSatisfied) {
+                !_ranStrongholdLocator && !mod.getModSettings().shouldUseBlastFurnace()) {
             setDebugState("Picking up the furnace while we are at it.");
             return new MineAndCollectTask(Items.FURNACE, 1, new Block[]{Blocks.FURNACE}, MiningRequirement.WOOD);
         }
-        if ((_config.rePickupFurnace && !_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END &&
+        if (_config.rePickupFurnace && !_endPortalOpened && WorldHelper.getCurrentDimension() != Dimension.END &&
                 !mod.getItemStorage().hasItem(Items.BLAST_FURNACE) &&
                 (mod.getBlockTracker().anyFound(blockPos -> WorldHelper.canBreak(mod, blockPos) &&
                         WorldHelper.canReach(mod, blockPos), Blocks.BLAST_FURNACE) ||
                         mod.getEntityTracker().itemDropped(Items.BLAST_FURNACE)) && _starterGearTask == null &&
                 _shieldTask == null && _ironGearTask == null && _gearTask == null && !_goToNetherTask.isActive() &&
-                !_ranStrongholdLocator && mod.getModSettings().shouldUseBlastFurnace()) && starterGearSatisfied) {
+                !_ranStrongholdLocator && mod.getModSettings().shouldUseBlastFurnace()) {
             setDebugState("Picking up the blast furnace while we are at it.");
             return new MineAndCollectTask(Items.BLAST_FURNACE, 1, new Block[]{Blocks.BLAST_FURNACE}, MiningRequirement.WOOD);
         }
