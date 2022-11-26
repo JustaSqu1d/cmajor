@@ -32,7 +32,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -155,11 +154,11 @@ public class AltoClef implements ModInitializer {
         _butler = new Butler(this);
         _dpc = new Dpc(this);
 
-        String botToken = DpcConfig.getInstance().botToken;
+        String botToken= DpcConfig.getInstance().botToken;
 
         boolean useDiscord = DpcConfig.getInstance().useDpc;
 
-        if (useDiscord) {
+        if (useDiscord){
             JDA jda = JDABuilder.createLight(botToken, EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
                     .addEventListeners(new Dpc(this))
                     .build();
@@ -254,21 +253,10 @@ public class AltoClef implements ModInitializer {
     }
 
     private void initializeBaritoneSettings() {
-        getClientBaritoneSettings().freeLook.value = false;
-        getClientBaritoneSettings().overshootTraverse.value = false;
-        getClientBaritoneSettings().allowOvershootDiagonalDescend.value = true;
-        getClientBaritoneSettings().allowInventory.value = true;
-        getClientBaritoneSettings().allowParkour.value = false;
-        getClientBaritoneSettings().allowParkourAscend.value = false;
-        getClientBaritoneSettings().allowParkourPlace.value = false;
-        getClientBaritoneSettings().allowDiagonalDescend.value = false;
-        getClientBaritoneSettings().allowDiagonalAscend.value = false;
-        getClientBaritoneSettings().blocksToAvoid.value = List.of(Blocks.FLOWERING_AZALEA, Blocks.AZALEA,
-                Blocks.POWDER_SNOW, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM, Blocks.CAVE_VINES,
-                Blocks.CAVE_VINES_PLANT, Blocks.TWISTING_VINES, Blocks.TWISTING_VINES_PLANT, Blocks.SWEET_BERRY_BUSH,
-                Blocks.WARPED_ROOTS, Blocks.SMALL_AMETHYST_BUD, Blocks.MEDIUM_AMETHYST_BUD, Blocks.LARGE_AMETHYST_BUD,
-                Blocks.AMETHYST_CLUSTER);
         // Let baritone move items to hotbar to use them
+        getClientBaritoneSettings().allowInventory.value = true;
+        // Pretty safe, minor risk EXCEPT in the nether, where it is a huge risk.
+        getClientBaritoneSettings().allowDiagonalAscend.value = true;
         // Reduces a bit of far rendering to save FPS
         getClientBaritoneSettings().fadePath.value = true;
         // Don't let baritone scan dropped items, we handle that ourselves.
@@ -276,16 +264,20 @@ public class AltoClef implements ModInitializer {
         // Don't let baritone wait for drops, we handle that ourselves.
         getClientBaritoneSettings().mineDropLoiterDurationMSThanksLouca.value = 0L;
 
+        // Really avoid mobs if we're in danger.
+        getClientBaritoneSettings().mobAvoidanceCoefficient.value = 2.0;
+        getClientBaritoneSettings().mobAvoidanceRadius.value = 12;
+
         // Water bucket placement will be handled by us exclusively
         getExtraBaritoneSettings().configurePlaceBucketButDontFall(true);
 
         // Give baritone more time to calculate paths. Sometimes they can be really far away.
         // Was: 2000L
-        getClientBaritoneSettings().failureTimeoutMS.reset();
+        getClientBaritoneSettings().failureTimeoutMS.value = 6000L;
         // Was: 5000L
-        getClientBaritoneSettings().planAheadFailureTimeoutMS.reset();
+        getClientBaritoneSettings().planAheadFailureTimeoutMS.value = 10000L;
         // Was 100
-        getClientBaritoneSettings().movementTimeoutTicks.reset();
+        getClientBaritoneSettings().movementTimeoutTicks.value = 200;
     }
 
     // List all command sources here.
@@ -400,9 +392,7 @@ public class AltoClef implements ModInitializer {
     /**
      * Discord controller. Receives messages from Discord.
      */
-    public Dpc getDpc() {
-        return _dpc;
-    }
+    public Dpc getDpc() { return _dpc; }
 
     /**
      * Sends chat messages (avoids auto-kicking)
