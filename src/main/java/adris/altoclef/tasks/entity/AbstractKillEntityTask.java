@@ -5,13 +5,17 @@ import adris.altoclef.tasksystem.Task;
 import adris.altoclef.util.helpers.LookHelper;
 import adris.altoclef.util.helpers.StorageHelper;
 import adris.altoclef.util.slots.PlayerSlot;
+import adris.altoclef.util.slots.Slot;
 import baritone.api.utils.input.Input;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
+import net.minecraft.screen.slot.SlotActionType;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Attacks an entity, but the target entity must be specified.
@@ -34,6 +38,8 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
         super(maintainDistance, combatGuardLowerRange, combatGuardLowerFieldRadius);
     }
 
+    private boolean _shielding = false;
+
     public static void equipWeapon(AltoClef mod) {
         List<ItemStack> invStacks = mod.getItemStorage().getItemStacksPlayerInventory(true);
         if (!invStacks.isEmpty()) {
@@ -55,6 +61,44 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
         }
     }
 
+    private void startShielding(AltoClef mod) {
+        ItemStack handItem = StorageHelper.getItemStackInSlot(PlayerSlot.getEquipSlot());
+        ItemStack cursor = StorageHelper.getItemStackInCursorSlot();
+        if (handItem.isFood()) {
+            mod.getSlotHandler().clickSlot(PlayerSlot.getEquipSlot(), 0, SlotActionType.PICKUP);
+        }
+        if (cursor.isFood()) {
+            Optional<Slot> toMoveTo = mod.getItemStorage().getSlotThatCanFitInPlayerInventory(cursor, false).or(() -> StorageHelper.getGarbageSlot(mod));
+            if (toMoveTo.isPresent()) {
+                Slot garbageSlot = toMoveTo.get();
+                mod.getSlotHandler().clickSlot(garbageSlot, 0, SlotActionType.PICKUP);
+            }
+        }
+        mod.getInputControls().hold(Input.SNEAK);
+        mod.getInputControls().hold(Input.CLICK_RIGHT);
+        mod.getClientBaritone().getPathingBehavior().softCancelIfSafe();
+        _shielding = true;
+        mod.getExtraBaritoneSettings().setInteractionPaused(true);
+    }
+
+    private void stopShielding(AltoClef mod) {
+        if (_shielding) {
+            ItemStack cursor = StorageHelper.getItemStackInCursorSlot();
+            if (cursor.isFood()) {
+                Optional<Slot> toMoveTo = mod.getItemStorage().getSlotThatCanFitInPlayerInventory(cursor, false).or(() -> StorageHelper.getGarbageSlot(mod));
+                if (toMoveTo.isPresent()) {
+                    Slot garbageSlot = toMoveTo.get();
+                    mod.getSlotHandler().clickSlot(garbageSlot, 0, SlotActionType.PICKUP);
+                }
+            }
+            mod.getInputControls().release(Input.SNEAK);
+            mod.getInputControls().release(Input.CLICK_RIGHT);
+            mod.getInputControls().release(Input.JUMP);
+            mod.getExtraBaritoneSettings().setInteractionPaused(false);
+            _shielding = false;
+        }
+    }
+
     @Override
     protected Task onEntityInteract(AltoClef mod, Entity entity) {
         if (!mod.getFoodChain().isTryingToEat() && !mod.getMLGBucketChain().isFallingOhNo(mod) &&
@@ -63,11 +107,26 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
             float hitProg = mod.getPlayer().getAttackCooldownProgress(0);
             // Equip weapon
             equipWeapon(mod);
+            // Shield if we have shield
+            if (mod.getItemStorage().hasItemInOffhand(Items.SHIELD)) {
+                ItemStack shieldSlot = StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT);
+                if (shieldSlot.getItem() != Items.SHIELD) {
+                    mod.getSlotHandler().forceEquipItemToOffhand(Items.SHIELD);
+                } else {
+                    if (hitProg < 0.75) {
+                        startShielding(mod);
+                    } else {
+                        stopShielding(mod);
+                    }
+                }
+            }
             if (hitProg >= 1) {
                 if (mod.getPlayer().isOnGround() || mod.getPlayer().getVelocity().getY() < 0 || mod.getPlayer().isTouchingWater()) {
                     LookHelper.lookAt(mod, entity.getEyePos());
                     mod.getInputControls().hold(Input.SPRINT);
+
                     mod.getControllerExtras().attack(entity);
+
                     mod.getInputControls().release(Input.SPRINT);
                     mod.getInputControls().hold(Input.SPRINT);
                 }
