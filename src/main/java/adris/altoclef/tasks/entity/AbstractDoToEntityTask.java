@@ -96,7 +96,7 @@ public abstract class AbstractDoToEntityTask extends Task implements ITaskRequir
                 mod.getMobDefenseChain().resetForceField();
             }
 
-            // If we don't specify a maintain distance, default to within 1 block of our reach.
+            // If we don't specify a distance to maintain, default to within 1 block of our reach.
             double maintainDistance = _maintainDistance >= 0 ? _maintainDistance : playerReach - 1;
 
             boolean tooClose = sqDist < maintainDistance * maintainDistance;
