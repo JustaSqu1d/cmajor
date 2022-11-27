@@ -380,8 +380,23 @@ public class Settings implements IFailableConfigFile {
     @JsonDeserialize(using = ItemDeserializer.class)
     private List<Item> supportedFuels = Streams.concat(
             Stream.of(
+                    Items.LAVA_BUCKET,
+                    Items.COAL_BLOCK,
+                    Items.DRIED_KELP_BLOCK,
+                    Items.BLAZE_ROD,
                     Items.COAL,
-                    Items.CHARCOAL
+                    Items.CHARCOAL,
+                    Items.WOODEN_PICKAXE,
+                    Items.WOODEN_AXE,
+                    Items.WOODEN_SHOVEL,
+                    Items.WOODEN_HOE,
+                    Items.WOODEN_SWORD,
+                    Items.BIRCH_BOAT,
+                    Items.ACACIA_BOAT,
+                    Items.DARK_OAK_BOAT,
+                    Items.JUNGLE_BOAT,
+                    Items.OAK_BOAT,
+                    Items.SPRUCE_BOAT
             )
     ).toList();
 
