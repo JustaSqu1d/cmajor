@@ -1392,10 +1392,10 @@ public class BeatMinecraft2Task extends Task {
                     if (!StorageHelper.itemTargetsMet(mod, COLLECT_STONE_GEAR) &&
                             !StorageHelper.itemTargetsMet(mod, IRON_GEAR_MIN) && !eyeGearSatisfied &&
                             !ironGearSatisfied) {
-                        if (mod.getItemStorage().getItemCount(Items.STICK) < 7) {
-                            _stoneGearTask = TaskCatalogue.getItemTask(Items.STICK, 15);
-                            return _stoneGearTask;
-                        }
+//                        if (mod.getItemStorage().getItemCount(Items.STICK) < 7) {
+//                            _stoneGearTask = TaskCatalogue.getItemTask(Items.STICK, 15);
+//                            return _stoneGearTask;
+//                        }
                         _stoneGearTask = TaskCatalogue.getSquashedItemTask(COLLECT_STONE_GEAR);
                         return _stoneGearTask;
                     } else {
