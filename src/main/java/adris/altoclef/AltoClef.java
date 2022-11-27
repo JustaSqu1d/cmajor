@@ -263,6 +263,8 @@ public class AltoClef implements ModInitializer {
         getClientBaritoneSettings().mineScanDroppedItems.value = false;
         // Don't let baritone wait for drops, we handle that ourselves.
         getClientBaritoneSettings().mineDropLoiterDurationMSThanksLouca.value = 0L;
+        // Don't let baritone mine blocks with sword.
+        getClientBaritoneSettings().useSwordToMine.value = false;
 
         // Really avoid mobs if we're in danger.
         getClientBaritoneSettings().mobAvoidanceCoefficient.value = 2.0;

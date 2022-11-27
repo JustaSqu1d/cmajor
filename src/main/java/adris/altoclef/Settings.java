@@ -138,7 +138,7 @@ public class Settings implements IFailableConfigFile {
      * it will travel 10000 blocks to mine that table, even if it finds
      * itself in a forest where the wood is abundant.
      */
-    private float resourceMineRange = 100;
+    private float resourceMineRange = 64;
 
     /**
      * When going to the nearest chest to store items, the bot may normally
@@ -159,7 +159,7 @@ public class Settings implements IFailableConfigFile {
      * 6 works well for singleplayer
      * 4 works better on more restrictive multiplayer servers
      */
-    private float entityReachRange = 4;
+    private float entityReachRange = 3.5F;
 
     /**
      * Before grabbing ANYTHING, get a pickaxe.

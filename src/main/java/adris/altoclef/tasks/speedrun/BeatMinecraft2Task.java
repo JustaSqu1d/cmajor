@@ -380,7 +380,7 @@ public class BeatMinecraft2Task extends Task {
         boolean eyeGearSatisfied = StorageHelper.isArmorEquippedAll(mod, COLLECT_EYE_ARMOR);
         boolean ironGearSatisfied = StorageHelper.isArmorEquippedAll(mod, COLLECT_IRON_ARMOR);
         if (mod.getItemStorage().hasItem(Items.DIAMOND_PICKAXE)) {
-            mod.getBehaviour().setBlockBreakAdditionalPenalty(0);
+            mod.getBehaviour().setBlockBreakAdditionalPenalty(0.2);
         } else {
             mod.getBehaviour().setBlockBreakAdditionalPenalty(mod.getClientBaritoneSettings().blockBreakAdditionalPenalty.defaultValue);
         }

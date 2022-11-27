@@ -16,7 +16,7 @@ public class BeatMinecraftConfig {
     public int minBuildMaterialCount = 5;
     public int buildMaterialCount = 64;
     public double dragonHeadCloseEnoughClickBedRange = 6;
-    public boolean ironGearBeforeDiamondGear = true;
+    public boolean ironGearBeforeDiamondGear = false;
     public boolean getShield = true;
     public boolean renderDistanceManipulation = true;
     public boolean rePickupSmoker = true;
