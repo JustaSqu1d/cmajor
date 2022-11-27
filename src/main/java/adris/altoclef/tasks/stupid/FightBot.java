@@ -86,7 +86,6 @@ public class FightBot extends Task {
         }
 
         if (!isReadyToPunk(mod)) {
-
             if (_runAwayTask != null && _runAwayTask.isActive() && !_runAwayTask.isFinished(mod)) {
                 // If our last "scare" was too long ago or there are no more nearby players...
                 boolean noneRemote = (closest.isEmpty() || !closest.get().isInRange(mod.getPlayer(), FEAR_DISTANCE));
@@ -180,7 +179,7 @@ public class FightBot extends Task {
 
     @Override
     protected String toDebugString() {
-        return "Fightbot ";
+        return "FightBot : Killing everyone";
     }
 
     private boolean isReadyToPunk(AltoClef mod) {

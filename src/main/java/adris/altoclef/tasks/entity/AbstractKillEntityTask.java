@@ -40,6 +40,10 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
 
     private boolean _shielding = false;
 
+    public boolean isShielding() {
+        return _shielding;
+    }
+
     public static void equipWeapon(AltoClef mod) {
         List<ItemStack> invStacks = mod.getItemStorage().getItemStacksPlayerInventory(true);
         if (!invStacks.isEmpty()) {
@@ -107,31 +111,41 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
             float hitProg = mod.getPlayer().getAttackCooldownProgress(0);
             // Equip weapon
             equipWeapon(mod);
-            // Shield if we have shield
-            if (mod.getItemStorage().hasItemInOffhand(Items.SHIELD)) {
-                ItemStack shieldSlot = StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT);
-                if (shieldSlot.getItem() != Items.SHIELD) {
-                    mod.getSlotHandler().forceEquipItemToOffhand(Items.SHIELD);
-                } else {
-                    if (hitProg < 0.75) {
-                        startShielding(mod);
+            // Look at them
+            LookHelper.lookAt(mod, entity.getEyePos());
+            if (entity.squaredDistanceTo(mod.getPlayer()) < CONSIDER_COMBAT_RANGE*CONSIDER_COMBAT_RANGE) {
+                // Shield if we have shield
+                if (mod.getItemStorage().hasItemInOffhand(Items.SHIELD)) {
+                    ItemStack shieldSlot = StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT);
+                    if (shieldSlot.getItem() != Items.SHIELD) {
+                        mod.getSlotHandler().forceEquipItemToOffhand(Items.SHIELD);
                     } else {
-                        stopShielding(mod);
+                            startShielding(mod);
+                            _shielding = true;
                     }
                 }
             }
+            else {
+                stopShielding(mod);
+                _shielding = false;
+            }
             if (hitProg >= 1) {
                 if (mod.getPlayer().isOnGround() || mod.getPlayer().getVelocity().getY() < 0 || mod.getPlayer().isTouchingWater()) {
-                    LookHelper.lookAt(mod, entity.getEyePos());
+                    boolean old_value = mod.getPlayer().isSprinting();
                     mod.getInputControls().hold(Input.SPRINT);
 
                     mod.getControllerExtras().attack(entity);
 
                     mod.getInputControls().release(Input.SPRINT);
-                    mod.getInputControls().hold(Input.SPRINT);
+                    if (old_value) mod.getInputControls().hold(Input.SPRINT);
                 }
             }
         }
         return null;
+    }
+
+    @Override
+    protected void onStop(AltoClef mod, Task interruptTask) {
+        if (_shielding) stopShielding(mod);
     }
 }
