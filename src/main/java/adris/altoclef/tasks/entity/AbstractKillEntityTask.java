@@ -115,13 +115,15 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
             LookHelper.lookAt(mod, entity.getEyePos());
             if (entity.squaredDistanceTo(mod.getPlayer()) < CONSIDER_COMBAT_RANGE*CONSIDER_COMBAT_RANGE) {
                 // Shield if we have shield
-                if (mod.getItemStorage().hasItemInOffhand(Items.SHIELD)) {
-                    ItemStack shieldSlot = StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT);
-                    if (shieldSlot.getItem() != Items.SHIELD) {
-                        mod.getSlotHandler().forceEquipItemToOffhand(Items.SHIELD);
-                    } else {
+                if (entity.squaredDistanceTo(mod.getPlayer()) < OTHER_FORCE_FIELD_RANGE * OTHER_FORCE_FIELD_RANGE) {
+                    if (mod.getItemStorage().hasItemInOffhand(Items.SHIELD)) {
+                        ItemStack shieldSlot = StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT);
+                        if (shieldSlot.getItem() != Items.SHIELD) {
+                            mod.getSlotHandler().forceEquipItemToOffhand(Items.SHIELD);
+                        } else {
                             startShielding(mod);
                             _shielding = true;
+                        }
                     }
                 }
             }
