@@ -65,44 +65,6 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
         }
     }
 
-    private void startShielding(AltoClef mod) {
-        ItemStack handItem = StorageHelper.getItemStackInSlot(PlayerSlot.getEquipSlot());
-        ItemStack cursor = StorageHelper.getItemStackInCursorSlot();
-        if (handItem.isFood()) {
-            mod.getSlotHandler().clickSlot(PlayerSlot.getEquipSlot(), 0, SlotActionType.PICKUP);
-        }
-        if (cursor.isFood()) {
-            Optional<Slot> toMoveTo = mod.getItemStorage().getSlotThatCanFitInPlayerInventory(cursor, false).or(() -> StorageHelper.getGarbageSlot(mod));
-            if (toMoveTo.isPresent()) {
-                Slot garbageSlot = toMoveTo.get();
-                mod.getSlotHandler().clickSlot(garbageSlot, 0, SlotActionType.PICKUP);
-            }
-        }
-        mod.getInputControls().hold(Input.SNEAK);
-        mod.getInputControls().hold(Input.CLICK_RIGHT);
-        mod.getClientBaritone().getPathingBehavior().softCancelIfSafe();
-        _shielding = true;
-        mod.getExtraBaritoneSettings().setInteractionPaused(true);
-    }
-
-    private void stopShielding(AltoClef mod) {
-        if (_shielding) {
-            ItemStack cursor = StorageHelper.getItemStackInCursorSlot();
-            if (cursor.isFood()) {
-                Optional<Slot> toMoveTo = mod.getItemStorage().getSlotThatCanFitInPlayerInventory(cursor, false).or(() -> StorageHelper.getGarbageSlot(mod));
-                if (toMoveTo.isPresent()) {
-                    Slot garbageSlot = toMoveTo.get();
-                    mod.getSlotHandler().clickSlot(garbageSlot, 0, SlotActionType.PICKUP);
-                }
-            }
-            mod.getInputControls().release(Input.SNEAK);
-            mod.getInputControls().release(Input.CLICK_RIGHT);
-            mod.getInputControls().release(Input.JUMP);
-            mod.getExtraBaritoneSettings().setInteractionPaused(false);
-            _shielding = false;
-        }
-    }
-
     @Override
     protected Task onEntityInteract(AltoClef mod, Entity entity) {
         if (!mod.getFoodChain().isTryingToEat() && !mod.getMLGBucketChain().isFallingOhNo(mod) &&
@@ -113,24 +75,6 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
             equipWeapon(mod);
             // Look at them
             LookHelper.lookAt(mod, entity.getEyePos());
-            if (entity.squaredDistanceTo(mod.getPlayer()) < CONSIDER_COMBAT_RANGE*CONSIDER_COMBAT_RANGE) {
-                // Shield if we have shield
-                if (entity.squaredDistanceTo(mod.getPlayer()) < OTHER_FORCE_FIELD_RANGE * OTHER_FORCE_FIELD_RANGE) {
-                    if (mod.getItemStorage().hasItemInOffhand(Items.SHIELD)) {
-                        ItemStack shieldSlot = StorageHelper.getItemStackInSlot(PlayerSlot.OFFHAND_SLOT);
-                        if (shieldSlot.getItem() != Items.SHIELD) {
-                            mod.getSlotHandler().forceEquipItemToOffhand(Items.SHIELD);
-                        } else {
-                            startShielding(mod);
-                            _shielding = true;
-                        }
-                    }
-                }
-            }
-            else {
-                stopShielding(mod);
-                _shielding = false;
-            }
             if (hitProg >= 1) {
                 if (mod.getPlayer().isOnGround() || mod.getPlayer().getVelocity().getY() < 0 || mod.getPlayer().isTouchingWater()) {
                     boolean old_value = mod.getPlayer().isSprinting();
@@ -148,6 +92,5 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
 
     @Override
     protected void onStop(AltoClef mod, Task interruptTask) {
-        if (_shielding) stopShielding(mod);
     }
 }
