@@ -69,7 +69,6 @@ public class KillPlayerTask extends AbstractKillEntityTask {
                 mod.getSlotHandler().clickSlot(garbageSlot, 0, SlotActionType.PICKUP);
             }
         }
-        mod.getInputControls().hold(Input.SNEAK);
         mod.getInputControls().hold(Input.CLICK_RIGHT);
         mod.getClientBaritone().getPathingBehavior().softCancelIfSafe();
         _shielding = true;
@@ -86,7 +85,6 @@ public class KillPlayerTask extends AbstractKillEntityTask {
                     mod.getSlotHandler().clickSlot(garbageSlot, 0, SlotActionType.PICKUP);
                 }
             }
-            mod.getInputControls().release(Input.SNEAK);
             mod.getInputControls().release(Input.CLICK_RIGHT);
             mod.getInputControls().release(Input.JUMP);
             mod.getExtraBaritoneSettings().setInteractionPaused(false);
