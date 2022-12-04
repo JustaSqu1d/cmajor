@@ -1,9 +1,10 @@
 package adris.altoclef.commands;
 
 import adris.altoclef.AltoClef;
-import adris.altoclef.Settings;
-import adris.altoclef.commandsystem.*;
-import adris.altoclef.tasks.speedrun.BeatMinecraftConfig;
+import adris.altoclef.commandsystem.Arg;
+import adris.altoclef.commandsystem.ArgParser;
+import adris.altoclef.commandsystem.Command;
+import adris.altoclef.commandsystem.CommandException;
 import adris.altoclef.util.helpers.ConfigHelper;
 
 import java.util.Arrays;

@@ -59,15 +59,16 @@ public class ReceiveCraftingOutputSlotTask extends Task implements ITaskUsesCraf
         boolean takeAll = weWantToAddToInventory >= craftCount;
         if (takeAll && mod.getItemStorage().getSlotThatCanFitInPlayerInventory(inOutput, true).isPresent()) {
             setDebugState("Quick moving output");
-            return new ClickSlotTask(_slot, SlotActionType.QUICK_MOVE);
+            mod.getSlotHandler().clickSlot(_slot, 0, SlotActionType.QUICK_MOVE);
+            return null;
         }
         setDebugState("Picking up output");
-        return new ClickSlotTask(_slot);
+        mod.getSlotHandler().clickSlot(_slot, 0, SlotActionType.PICKUP);
+        return null;
     }
 
     @Override
     protected void onStop(AltoClef mod, Task interruptTask) {
-
     }
 
     @Override

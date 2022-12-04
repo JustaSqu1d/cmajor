@@ -96,7 +96,7 @@ public class Settings implements IFailableConfigFile {
 
 
     /**
-     * minumum amount of food to have in the inventory.
+     * minimum amount of food to have in the inventory.
      * if we have less food than this value the bot will go pickup some more.
      */
     private int minimumFoodAllowed = 0;
@@ -118,7 +118,7 @@ public class Settings implements IFailableConfigFile {
      * Set this to 0 to disable chest pickups.
      * <p>
      * Don't set this too high, as the bot will prioritize chests even if the resource
-     * is easily accesible now.
+     * is easily accessible now.
      */
     private float resourceChestLocateRange = 500;
 
@@ -138,7 +138,7 @@ public class Settings implements IFailableConfigFile {
      * it will travel 10000 blocks to mine that table, even if it finds
      * itself in a forest where the wood is abundant.
      */
-    private float resourceMineRange = 100;
+    private float resourceMineRange = 64;
 
     /**
      * When going to the nearest chest to store items, the bot may normally
@@ -159,7 +159,7 @@ public class Settings implements IFailableConfigFile {
      * 6 works well for singleplayer
      * 4 works better on more restrictive multiplayer servers
      */
-    private float entityReachRange = 4;
+    private float entityReachRange = 3.5F;
 
     /**
      * Before grabbing ANYTHING, get a pickaxe.
@@ -203,16 +203,6 @@ public class Settings implements IFailableConfigFile {
      * If enabled, will attempt to dodge all incoming projectiles
      */
     private boolean dodgeProjectiles = true;
-
-    /**
-     * If any hostile mob is "close" to our bot for this long,
-     * consider it a nuissance and defeat it if we have enough gear.
-     * <p>
-     * Skeletons + Witches get a much larger range.
-     * <p>
-     * Set to zero to make the bot always kill/run away from any nearby hostiles.
-     */
-    private double killAnnoyingHostileWhenCloseForSeconds = 12;
 
     /**
      * Skeletons and large groups of mobs are a huge pain.
@@ -300,13 +290,16 @@ public class Settings implements IFailableConfigFile {
     @JsonDeserialize(using = ItemDeserializer.class)
     private List<Item> throwawayItems = Arrays.asList(
             // Overworld junk
+            Items.DRIPSTONE_BLOCK,
+            Items.ROOTED_DIRT,
+            Items.GRAVEL,
+            Items.SAND,
             Items.DIORITE,
             Items.ANDESITE,
             Items.GRANITE,
             Items.TUFF,
             Items.COBBLESTONE,
             Items.DIRT,
-            Items.GRAVEL,
             Items.COBBLED_DEEPSLATE,
             Items.ACACIA_LEAVES, Items.BIRCH_LEAVES, Items.DARK_OAK_LEAVES, Items.OAK_LEAVES, Items.JUNGLE_LEAVES, Items.SPRUCE_LEAVES,
             // Nether junk, to be fair it's mostly tuned for the "beat game" task
@@ -318,7 +311,9 @@ public class Settings implements IFailableConfigFile {
             Items.NETHER_BRICK,
             Items.BASALT,
             Items.BLACKSTONE,
-            Items.END_STONE
+            Items.END_STONE,
+            Items.SANDSTONE,
+            Items.STONE_BRICKS
     );
 
     /**
@@ -330,7 +325,7 @@ public class Settings implements IFailableConfigFile {
      * If true, items with custom names will be protected/marked as "important"
      * so they won't be thrown away.
      */
-    private boolean dontThrowAwayCustomNameItems = true;
+    private boolean dontThrowAwayCustomNameItems = false;
 
     /**
      * If we need to throw away something but we don't have any "throwaway Items",
@@ -366,6 +361,11 @@ public class Settings implements IFailableConfigFile {
     ).toList();
 
     /**
+     * If true, a blast furnace will be used in smelting if an item to smelt is applicable.
+     */
+    private boolean useBlastFurnace = true;
+
+    /**
      * If true, will only accept items found in `supportedFuels` as fuel when smelting.
      * <p>
      * Be careful when setting this to false, as ALL burnable items are liable to be burned
@@ -380,10 +380,24 @@ public class Settings implements IFailableConfigFile {
     @JsonDeserialize(using = ItemDeserializer.class)
     private List<Item> supportedFuels = Streams.concat(
             Stream.of(
+                    Items.LAVA_BUCKET,
+                    Items.COAL_BLOCK,
+                    Items.DRIED_KELP_BLOCK,
+                    Items.BLAZE_ROD,
                     Items.COAL,
-                    Items.CHARCOAL
-            ),
-            Stream.of(ItemHelper.PLANKS)
+                    Items.CHARCOAL,
+                    Items.WOODEN_PICKAXE,
+                    Items.WOODEN_AXE,
+                    Items.WOODEN_SHOVEL,
+                    Items.WOODEN_HOE,
+                    Items.WOODEN_SWORD,
+                    Items.BIRCH_BOAT,
+                    Items.ACACIA_BOAT,
+                    Items.DARK_OAK_BOAT,
+                    Items.JUNGLE_BOAT,
+                    Items.OAK_BOAT,
+                    Items.SPRUCE_BOAT
+            )
     ).toList();
 
     /**
@@ -402,14 +416,12 @@ public class Settings implements IFailableConfigFile {
      * <p>
      * areasToProtect : [
      * {
-     * "start": "-10, 0, -10",
-     * "end": "10, 255, 10",
-     * "dimension" : "OVERWORLD"
+     * start: "-10, 0, -10",
+     * end: "10, 255, 10"
      * },
      * {
-     * "start": "1000, 50, 2000",
-     * "end": "1200, 255, 2100",
-     * "dimension" : "OVERWORLD"
+     * start: "1000, 50, 2000",
+     * end: "1200, 255, 2100"
      * },
      * ],
      */
@@ -419,15 +431,6 @@ public class Settings implements IFailableConfigFile {
     //////////////////////////////////////////////////////////////////////////////////////////
     ////////** END SETTINGS w/ COMMENTS **////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
-
-
-    private static boolean idArrayContainsItem(Item item, int[] ids) {
-        int id = Item.getRawId(item);
-        for (int check : ids) {
-            if (check == id) return true;
-        }
-        return false;
-    }
 
     public static void load(Consumer<Settings> onReload) {
         ConfigHelper.loadConfig(SETTINGS_PATH, Settings::new, Settings.class, onReload);
@@ -487,10 +490,6 @@ public class Settings implements IFailableConfigFile {
 
     public boolean isDodgeProjectiles() {
         return dodgeProjectiles;
-    }
-
-    public double getKillHostileWhenCloseForSeconds() {
-        return killAnnoyingHostileWhenCloseForSeconds;
     }
 
     public boolean isAutoEat() {
@@ -589,6 +588,10 @@ public class Settings implements IFailableConfigFile {
         return limitFuelsToSupportedFuels;
     }
 
+    public boolean shouldUseBlastFurnace() {
+        return useBlastFurnace;
+    }
+
     public boolean isSupportedFuel(Item item) {
         return !limitFuelsToSupportedFuels || supportedFuels.contains(item);
     }
@@ -598,7 +601,7 @@ public class Settings implements IFailableConfigFile {
         return supportedFuels.toArray(Item[]::new);
     }
 
-    public boolean isPositionExplicitelyProtected(BlockPos pos) {
+    public boolean isPositionExplicitlyProtected(BlockPos pos) {
         for (BlockRange protection : areasToProtect) {
             if (protection.contains(pos)) return true;
         }

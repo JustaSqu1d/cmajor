@@ -190,8 +190,6 @@ public class AltoClef implements ModInitializer {
                 getCommandExecutor().executeWithPrefix(getModSettings().getIdleCommand());
             }
             // Don't break blocks or place blocks where we are explicitly protected.
-            getExtraBaritoneSettings().avoidBlockBreak(blockPos -> _settings.isPositionExplicitelyProtected(blockPos));
-            getExtraBaritoneSettings().avoidBlockPlace(blockPos -> _settings.isPositionExplicitelyProtected(blockPos));
         });
 
         // Receive + cancel chat
@@ -265,6 +263,8 @@ public class AltoClef implements ModInitializer {
         getClientBaritoneSettings().mineScanDroppedItems.value = false;
         // Don't let baritone wait for drops, we handle that ourselves.
         getClientBaritoneSettings().mineDropLoiterDurationMSThanksLouca.value = 0L;
+        // Don't let baritone mine blocks with sword.
+        getClientBaritoneSettings().useSwordToMine.value = false;
 
         // Really avoid mobs if we're in danger.
         getClientBaritoneSettings().mobAvoidanceCoefficient.value = 2.0;

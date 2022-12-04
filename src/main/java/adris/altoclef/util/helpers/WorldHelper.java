@@ -32,8 +32,8 @@ import java.util.*;
 public interface WorldHelper {
 
     // God bless 1.18
-    int WORLD_CEILING_Y = 255;
-    int WORLD_FLOOR_Y = 0;
+    int WORLD_CEILING_Y = 320;
+    int WORLD_FLOOR_Y = -64;
 
     /**
      * Get the number of in-game ticks the game/world has been active for.
@@ -238,10 +238,11 @@ public interface WorldHelper {
             // Always fall in water
             // TODO: If there's a 1 meter thick layer of water and then a massive drop below, the bot will think it is safe.
             if (MovementHelper.isWater(s))
-                return false;
+                return true;
             // We hit ground, depends
-            if (WorldHelper.isSolid(mod, check))
+            if (WorldHelper.isSolid(mod, check)) {
                 return tooFarToFall;
+            }
         }
         // At this point we probably fall through the void, so not safe.
         return true;

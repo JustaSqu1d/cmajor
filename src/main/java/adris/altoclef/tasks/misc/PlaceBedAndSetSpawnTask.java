@@ -192,7 +192,7 @@ public class PlaceBedAndSetSpawnTask extends Task {
                 if (_bedForSpawnPoint == null) {
                     _bedForSpawnPoint = toSleepIn;
                 }
-                if (!closeEnough) {
+                if (!closeEnough && toSleepIn.isWithinDistance(mod.getPlayer().getPos(), 10)) {
                     try {
                         Direction face = mod.getWorld().getBlockState(toSleepIn).get(BedBlock.FACING);
                         Direction side = face.rotateYClockwise();

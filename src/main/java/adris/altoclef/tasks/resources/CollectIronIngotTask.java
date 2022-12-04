@@ -1,14 +1,18 @@
 package adris.altoclef.tasks.resources;
 
 import adris.altoclef.AltoClef;
-import adris.altoclef.tasks.container.CraftInTableTask;
+import adris.altoclef.TaskCatalogue;
 import adris.altoclef.tasks.ResourceTask;
+import adris.altoclef.tasks.container.SmeltInBlastFurnaceTask;
 import adris.altoclef.tasks.container.SmeltInFurnaceTask;
-import adris.altoclef.tasks.movement.DefaultGoToDimensionTask;
 import adris.altoclef.tasksystem.Task;
-import adris.altoclef.util.*;
-import adris.altoclef.util.helpers.WorldHelper;
+import adris.altoclef.util.ItemTarget;
+import adris.altoclef.util.SmeltTarget;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.Optional;
 
 public class CollectIronIngotTask extends ResourceTask {
 
@@ -26,29 +30,34 @@ public class CollectIronIngotTask extends ResourceTask {
 
     @Override
     protected void onResourceStart(AltoClef mod) {
-
+        mod.getBehaviour().push();
     }
 
     @Override
     protected Task onResourceTick(AltoClef mod) {
-        int nuggs = mod.getItemStorage().getItemCount(Items.IRON_NUGGET);
-        if (nuggs >= 9) {
-            // If we have enough nuggets, craft them.
-            ItemTarget n = new ItemTarget(Items.IRON_NUGGET);
-            CraftingRecipe recipe = CraftingRecipe.newShapedRecipe("iron_ingot", new ItemTarget[]{
-                    n, n, n, n, n, n, n, n, n
-            }, 1);
-            return new CraftInTableTask(new RecipeTarget(Items.IRON_INGOT, _count, recipe));
-        } else if (WorldHelper.getCurrentDimension() == Dimension.OVERWORLD){
+        if (mod.getModSettings().shouldUseBlastFurnace()) {
+            if (mod.getItemStorage().hasItem(Items.BLAST_FURNACE) ||
+                    mod.getBlockTracker().anyFound(Blocks.BLAST_FURNACE) ||
+                    mod.getEntityTracker().itemDropped(Items.BLAST_FURNACE)) {
+                return new SmeltInBlastFurnaceTask(new SmeltTarget(new ItemTarget(Items.IRON_INGOT, _count), new ItemTarget(Items.RAW_IRON, _count)));
+            }
+            if (_count < 5) {
                 return new SmeltInFurnaceTask(new SmeltTarget(new ItemTarget(Items.IRON_INGOT, _count), new ItemTarget(Items.RAW_IRON, _count)));
-        } else {
-            return new DefaultGoToDimensionTask(Dimension.OVERWORLD);
+            }
+            mod.getBehaviour().addProtectedItems(Items.COBBLESTONE, Items.STONE, Items.SMOOTH_STONE);
+            Optional<BlockPos> furnacePos = mod.getBlockTracker().getNearestTracking(Blocks.FURNACE);
+            furnacePos.ifPresent(blockPos -> mod.getBehaviour().avoidBlockBreaking(blockPos));
+            if (mod.getItemStorage().getItemCount(Items.IRON_INGOT) >= 5) {
+                return TaskCatalogue.getItemTask(Items.BLAST_FURNACE, 1);
+            }
+            return new SmeltInFurnaceTask(new SmeltTarget(new ItemTarget(Items.IRON_INGOT, 5), new ItemTarget(Items.RAW_IRON, 5)));
         }
+        return new SmeltInFurnaceTask(new SmeltTarget(new ItemTarget(Items.IRON_INGOT, _count), new ItemTarget(Items.RAW_IRON, _count)));
     }
 
     @Override
     protected void onResourceStop(AltoClef mod, Task interruptTask) {
-
+        mod.getBehaviour().pop();
     }
 
     @Override
