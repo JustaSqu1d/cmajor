@@ -2,29 +2,37 @@ package adris.altoclef.tasks.entity;
 
 import adris.altoclef.AltoClef;
 import adris.altoclef.tasksystem.Task;
-import adris.altoclef.util.helpers.LookHelper;
-import adris.altoclef.util.helpers.StorageHelper;
-import adris.altoclef.util.slots.PlayerSlot;
-import adris.altoclef.util.slots.Slot;
-import baritone.api.utils.input.Input;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
-import net.minecraft.screen.slot.SlotActionType;
-
-import java.util.List;
-import java.util.Optional;
+import baritone.api.utils.input.Input;
 
 /**
  * Attacks an entity, but the target entity must be specified.
  */
 public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
+
     private static final double OTHER_FORCE_FIELD_RANGE = 2;
 
     // Not the "striking" distance, but the "ok we're close enough, lower our guard for other mobs and focus on this one" range.
     private static final double CONSIDER_COMBAT_RANGE = 10;
+
+    private Integer _hitCooldown = 0;
+
+    private static final Item[] WEAPON_ITEMS = new Item[]{
+            Items.NETHERITE_SWORD,
+            Items.DIAMOND_SWORD,
+            Items.IRON_SWORD,
+            Items.STONE_SWORD,
+            Items.WOODEN_SWORD,
+            Items.GOLDEN_SWORD,
+            Items.NETHERITE_AXE,
+            Items.DIAMOND_AXE,
+            Items.IRON_AXE,
+            Items.STONE_AXE,
+            Items.WOODEN_AXE,
+            Items.GOLDEN_AXE
+    };
 
     public AbstractKillEntityTask() {
         this(CONSIDER_COMBAT_RANGE, OTHER_FORCE_FIELD_RANGE);
@@ -38,59 +46,34 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
         super(maintainDistance, combatGuardLowerRange, combatGuardLowerFieldRadius);
     }
 
-    private boolean _shielding = false;
-
-    public boolean isShielding() {
-        return _shielding;
-    }
-
     public static void equipWeapon(AltoClef mod) {
-        List<ItemStack> invStacks = mod.getItemStorage().getItemStacksPlayerInventory(true);
-        if (!invStacks.isEmpty()) {
-            float handDamage = Float.NEGATIVE_INFINITY;
-            for (ItemStack invStack : invStacks) {
-                if (invStack.getItem() instanceof SwordItem item) {
-                    float itemDamage = item.getMaterial().getAttackDamage();
-                    Item handItem = StorageHelper.getItemStackInSlot(PlayerSlot.getEquipSlot()).getItem();
-                    if (handItem instanceof SwordItem handToolItem) {
-                        handDamage = handToolItem.getMaterial().getAttackDamage();
-                    }
-                    if (itemDamage > handDamage) {
-                        mod.getSlotHandler().forceEquipItem(item);
-                    } else {
-                        mod.getSlotHandler().forceEquipItem(handItem);
-                    }
-                }
+        for (Item item : WEAPON_ITEMS) {
+            if (mod.getItemStorage().hasItem(item)) {
+                mod.getSlotHandler().forceEquipItem(item);
+                return;
             }
         }
     }
 
     @Override
     protected Task onEntityInteract(AltoClef mod, Entity entity) {
-        if (!mod.getFoodChain().isTryingToEat() && !mod.getMLGBucketChain().isFallingOhNo(mod) &&
-                mod.getMLGBucketChain().doneMLG() && !mod.getMLGBucketChain().isChorusFruiting() &&
-                mod.getClientBaritone().getPathingBehavior().isSafeToCancel()) {
-            float hitProg = mod.getPlayer().getAttackCooldownProgress(0);
-            // Equip weapon
-            equipWeapon(mod);
-            // Look at them
-            LookHelper.lookAt(mod, entity.getEyePos());
-            if (hitProg >= 1) {
-                if (mod.getPlayer().isOnGround() || mod.getPlayer().getVelocity().getY() < 0 || mod.getPlayer().isTouchingWater()) {
-                    boolean old_value = mod.getPlayer().isSprinting();
-                    mod.getInputControls().hold(Input.SPRINT);
+        float hitProg = mod.getPlayer().getAttackCooldownProgress(0);
 
-                    mod.getControllerExtras().attack(entity);
-
-                    mod.getInputControls().release(Input.SPRINT);
-                    if (old_value) mod.getInputControls().hold(Input.SPRINT);
-                }
-            }
+        // Equip weapon
+        equipWeapon(mod);
+        if (hitProg >= 0.99 && _hitCooldown == 0) {
+            _hitCooldown = 1;
+            mod.getInputControls().hold(Input.SPRINT);
+            mod.getControllerExtras().attack(entity);
+            mod.getInputControls().release(Input.SPRINT);
+            mod.getInputControls().hold(Input.SPRINT);
         }
         return null;
     }
 
     @Override
-    protected void onStop(AltoClef mod, Task interruptTask) {
+    protected Task onTick(AltoClef mod) {
+        _hitCooldown = Math.max(0, _hitCooldown - 1);
+        return super.onTick(mod);
     }
 }
