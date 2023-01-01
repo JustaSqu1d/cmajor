@@ -144,6 +144,16 @@ public class BotBehaviour {
         current().applyState();
     }
 
+    //Way of disabling MLG and defense from a task
+    public boolean isDefenseDisabled() {
+        return current().disableDefence;
+    }
+
+    public void disableDefence(boolean value) {
+        current().disableDefence = value;
+        current().applyState();
+    }
+
     public void setPauseOnLostFocus(boolean pauseOnLostFocus) {
         current().pauseOnLostFocus = pauseOnLostFocus;
         current().applyState();
@@ -267,6 +277,7 @@ public class BotBehaviour {
         // Alto Clef params
         public boolean exclusivelyMineLogs;
         public boolean forceFieldPlayers;
+        public boolean disableDefence;
         public List<Predicate<Entity>> avoidDodgingProjectile = new ArrayList<>();
         public List<Predicate<Entity>> excludeFromForceField = new ArrayList<>();
         public List<Pair<Slot, Predicate<ItemStack>>> conversionSlots = new ArrayList<>();
@@ -310,6 +321,7 @@ public class BotBehaviour {
                 conversionSlots.addAll(toCopy.conversionSlots);
                 forceFieldPlayers = toCopy.forceFieldPlayers;
                 escapeLava = toCopy.escapeLava;
+                disableDefence = toCopy.disableDefence;
             }
         }
 
