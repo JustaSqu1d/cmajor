@@ -14,6 +14,9 @@ import adris.altoclef.tasks.entity.KillEntityTask;
 import adris.altoclef.tasks.misc.*;
 import adris.altoclef.tasks.resources.TradeWithPiglinsTask;
 import adris.altoclef.tasks.examples.ExampleTask2;
+import adris.altoclef.tasks.misc.EquipArmorTask;
+import adris.altoclef.tasks.misc.PlaceBedAndSetSpawnTask;
+import adris.altoclef.tasks.misc.RepairToolTask;
 import adris.altoclef.tasks.construction.PlaceSignTask;
 import adris.altoclef.tasks.speedrun.*;
 import adris.altoclef.tasks.stupid.BeeMovieTask;
@@ -200,6 +203,9 @@ public class Playground {
                 ItemTarget target = new ItemTarget("iron_ingot", 4);
                 ItemTarget material = new ItemTarget("iron_ore", 4);
                 mod.runUserTask(new SmeltInFurnaceTask(new SmeltTarget(target, material)));
+                break;
+            case "repair":
+                mod.runUserTask(new RepairToolTask());
                 break;
             case "iron":
                 mod.runUserTask(new ConstructIronGolemTask());

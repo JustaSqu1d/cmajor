@@ -48,8 +48,7 @@ public class KillPlayerTask extends AbstractKillEntityTask {
             }
             if (distSq < 5 * 5) {
                 startShielding(mod);
-            }
-            else {
+            } else {
                 stopShielding(mod);
             }
         }

@@ -12,14 +12,14 @@ public class PlayerSlot extends Slot {
     public static final PlayerSlot ARMOR_CHESTPLATE_SLOT = new PlayerSlot(6);
     public static final PlayerSlot ARMOR_LEGGINGS_SLOT = new PlayerSlot(7);
     public static final PlayerSlot ARMOR_BOOTS_SLOT = new PlayerSlot(8);
+    public static final PlayerSlot OFFHAND_SLOT = new PlayerSlot(45);
     public static final PlayerSlot[] ARMOR_SLOTS = new PlayerSlot[]{
             ARMOR_HELMET_SLOT,
             ARMOR_CHESTPLATE_SLOT,
             ARMOR_LEGGINGS_SLOT,
-            ARMOR_BOOTS_SLOT
+            ARMOR_BOOTS_SLOT,
+            OFFHAND_SLOT
     };
-    public static final PlayerSlot OFFHAND_SLOT = new PlayerSlot(45);
-
     public static final PlayerSlot[] CRAFT_INPUT_SLOTS = IntStream.range(0, 4).mapToObj(PlayerSlot::getCraftInputSlot).toArray(PlayerSlot[]::new);
 
     public PlayerSlot(int windowSlot) {

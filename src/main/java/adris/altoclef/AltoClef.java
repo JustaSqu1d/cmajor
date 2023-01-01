@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -253,33 +254,36 @@ public class AltoClef implements ModInitializer {
     }
 
     private void initializeBaritoneSettings() {
-        // Let baritone move items to hotbar to use them
+        getClientBaritoneSettings().freeLook.value = false;
+        getClientBaritoneSettings().overshootTraverse.value = false;
+        getClientBaritoneSettings().allowOvershootDiagonalDescend.value = true;
+
+
         getClientBaritoneSettings().allowInventory.value = true;
-        // Pretty safe, minor risk EXCEPT in the nether, where it is a huge risk.
-        getClientBaritoneSettings().allowDiagonalAscend.value = true;
+        getClientBaritoneSettings().allowParkour.value = false;
+        getClientBaritoneSettings().allowParkourAscend.value = false;
+        getClientBaritoneSettings().allowParkourPlace.value = false;
+        getClientBaritoneSettings().allowDiagonalDescend.value = false;
+        getClientBaritoneSettings().allowDiagonalAscend.value = false;
+        getClientBaritoneSettings().blocksToAvoid.value = List.of(Blocks.FLOWERING_AZALEA, Blocks.AZALEA,
+                Blocks.POWDER_SNOW, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM, Blocks.CAVE_VINES, Blocks.CAVE_VINES_PLANT, Blocks.SWEET_BERRY_BUSH, Blocks.WARPED_ROOTS, Blocks.VINE, Blocks.SMALL_AMETHYST_BUD, Blocks.MEDIUM_AMETHYST_BUD, Blocks.LARGE_AMETHYST_BUD, Blocks.AMETHYST_CLUSTER);
         // Reduces a bit of far rendering to save FPS
         getClientBaritoneSettings().fadePath.value = true;
         // Don't let baritone scan dropped items, we handle that ourselves.
         getClientBaritoneSettings().mineScanDroppedItems.value = false;
         // Don't let baritone wait for drops, we handle that ourselves.
         getClientBaritoneSettings().mineDropLoiterDurationMSThanksLouca.value = 0L;
-        // Don't let baritone mine blocks with sword.
-        getClientBaritoneSettings().useSwordToMine.value = false;
-
-        // Really avoid mobs if we're in danger.
-        getClientBaritoneSettings().mobAvoidanceCoefficient.value = 2.0;
-        getClientBaritoneSettings().mobAvoidanceRadius.value = 12;
 
         // Water bucket placement will be handled by us exclusively
         getExtraBaritoneSettings().configurePlaceBucketButDontFall(true);
 
         // Give baritone more time to calculate paths. Sometimes they can be really far away.
         // Was: 2000L
-        getClientBaritoneSettings().failureTimeoutMS.value = 6000L;
+        getClientBaritoneSettings().failureTimeoutMS.reset();
         // Was: 5000L
-        getClientBaritoneSettings().planAheadFailureTimeoutMS.value = 10000L;
+        getClientBaritoneSettings().planAheadFailureTimeoutMS.reset();
         // Was 100
-        getClientBaritoneSettings().movementTimeoutTicks.value = 200;
+        getClientBaritoneSettings().movementTimeoutTicks.reset();
     }
 
     // List all command sources here.
