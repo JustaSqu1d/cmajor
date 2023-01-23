@@ -57,10 +57,10 @@ public abstract class AbstractKillEntityTask extends AbstractDoToEntityTask {
 
     @Override
     protected Task onEntityInteract(AltoClef mod, Entity entity) {
+        equipWeapon(mod);
+
         float hitProg = mod.getPlayer().getAttackCooldownProgress(0);
 
-        // Equip weapon
-        equipWeapon(mod);
         if (hitProg >= 0.99 && _hitCooldown == 0) {
             _hitCooldown = 1;
             mod.getInputControls().hold(Input.SPRINT);
