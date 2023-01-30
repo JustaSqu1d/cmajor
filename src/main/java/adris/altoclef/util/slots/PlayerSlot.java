@@ -17,8 +17,7 @@ public class PlayerSlot extends Slot {
             ARMOR_HELMET_SLOT,
             ARMOR_CHESTPLATE_SLOT,
             ARMOR_LEGGINGS_SLOT,
-            ARMOR_BOOTS_SLOT,
-            OFFHAND_SLOT
+            ARMOR_BOOTS_SLOT
     };
     public static final PlayerSlot[] CRAFT_INPUT_SLOTS = IntStream.range(0, 4).mapToObj(PlayerSlot::getCraftInputSlot).toArray(PlayerSlot[]::new);
 
