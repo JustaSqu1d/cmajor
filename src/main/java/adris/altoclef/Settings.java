@@ -120,7 +120,7 @@ public class Settings implements IFailableConfigFile {
      * Don't set this too high, as the bot will prioritize chests even if the resource
      * is easily accessible now.
      */
-    private float resourceChestLocateRange = 500;
+    private float resourceChestLocateRange = 64;
 
     /**
      * Some block resources are by default obtained through non-mining means.
@@ -272,7 +272,7 @@ public class Settings implements IFailableConfigFile {
      * When fast traveling via the nether, walk to our destination if we somehow end up closer than this range in the overworld.
      * We will normally travel well within this range (to within 100 blocks if not within a few), so keep this value ~decently~ large.
      */
-    private int netherFastTravelWalkingRange = 600;
+    private int netherFastTravelWalkingRange = 640;
 
     /**
      * If set, will run this command by default when no other commands are running.
@@ -319,7 +319,7 @@ public class Settings implements IFailableConfigFile {
     /**
      * How many throwaway blocks to keep as building blocks.
      */
-    private int reservedBuildingBlockCount = 64;
+    private int reservedBuildingBlockCount = 128;
 
     /**
      * If true, items with custom names will be protected/marked as "important"
